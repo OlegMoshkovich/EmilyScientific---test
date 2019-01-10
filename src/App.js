@@ -12,16 +12,17 @@ class App extends Component {
       csvdata: []
     }
     this.loadFile = this.loadFile.bind(this);
+    this.resetState = this.resetState.bind(this);
   }
-
+  resetState(){
+    this.setState({csvdata:[]})
+  }
   loadFile(data){
+    this.resetState();
     this.setState({
-      csvdata:data
+      csvdata: data
     })
-
     document.querySelector('.newTable').style.display = "block"
-
-
   };
 
   render() {

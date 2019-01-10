@@ -19,21 +19,16 @@ const styles = theme => ({
   },
 });
 
-let id = 0;
-
-const rows = [
-];
-
-const tableParams = []
-
 function SimpleTable(props) {
+  const tableParams = []
+  const rows = [];
   const { classes } = props;
   const data = props.data;
 
   for (let element in data[0]){
     tableParams.push(data[0][element])
   }
-  
+
   props.data.map((record,index)=>{
     rows.push([...record])
   })
