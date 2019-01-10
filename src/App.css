@@ -30,3 +30,52 @@
     transform: rotate(360deg);
   }
 }
+* {
+  box-sizing: border-box;
+  font-family: 'Helvetica', sans-serif;
+}
+
+.container {
+  text-align: left;
+  padding: 15px;
+  margin: 10px auto;
+}
+
+.csv-input {
+  text-align: left;
+  padding: 10px;
+  display: block;
+  margin: 15px auto;
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+}
+
+.container p {
+  padding-top: 10px;
+  color: #666;
+}
+
+.center{
+  margin-left:auto;
+  margin-right:auto;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.newTable{
+  display:none;
+}
