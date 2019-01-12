@@ -8,9 +8,7 @@ import Button from '@material-ui/core/Button'
 
 import {Collapse} from 'react-collapse';
 // import {Presets} from 'react-motion';
-// import { Chart } from "react-google-charts";
-
-
+import { Chart } from "react-google-charts";
 
 class App extends Component {
   constructor(props) {
@@ -27,23 +25,48 @@ class App extends Component {
   loadFile(data){
     const graphData = [];
     let newArr =[];
-    for (let row in data){
-      if(row === 0){
-        newArr = [data[row][1],data[row][2]]
-      }else{
-        newArr = [parseInt(data[row][1]),parseInt(data[row][2])]
-      }
+    let dataObj = {};
+    const keys = [];
+    let counter = 0;
+    const dataArr = []
+    let count = 0;
 
+
+      data.map((element,index)=>{
+        dataObj['id'] = index
+        if (index === 0){
+          for(let key of element){
+            keys.push(key)
+          }
+        }else{
+          for(let key of element){
+            dataObj[keys[count]] = key;
+            count++;
+          }
+          count = 0
+          dataArr.push(dataObj)
+          dataObj = {};
+        }
+        return dataArr
+    })
+
+
+    for (let row in data){
+      if(counter === 0){
+        newArr = [data[row][0],data[row][1],data[row][2],data[row][3],data[row][4]]
+      }
+      else{
+        newArr = [parseInt(data[row][0]),parseInt(data[row][1]),parseInt(data[row][2]),parseInt(data[row][3]),parseInt(data[row][4]),]
+      }
       graphData.push(newArr)
-      // console.log('printing the row',data[row][1])
+      counter++;
     }
-    console.log('graphingData',graphData)
+
+
     this.setState({
       csvData: data,
       graphData:graphData
     })
-    // console.log('loadfile data',data)
-
   };
 
   buttonNameHandler(){
@@ -80,7 +103,7 @@ class App extends Component {
         <EnhancedTable data = {this.state.csvData}/>
        </Collapse>
 
-       {/*
+       {/* */}
          <Chart
            chartType="ScatterChart"
            data={this.state.graphData}
@@ -88,7 +111,7 @@ class App extends Component {
            height="400px"
            legendToggle
          />
-         */}
+
 
 
 
