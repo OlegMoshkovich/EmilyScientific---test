@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import CSVReader from "react-csv-reader";
-// import Row from './Components/Row'
-// import SimpleTable from './Components/MaterialTable'
 import EnhancedTable from './Components/SortableTable'
 import './App.css';
 import Button from '@material-ui/core/Button'
-
 import {Collapse} from 'react-collapse';
-// import {Presets} from 'react-motion';
 import { Chart } from "react-google-charts";
+
+let style = {
+  button:{
+    margin:'10px',
+    fontSize:'10px',
+    width:'150px'
+  },
+};
 
 class App extends Component {
   constructor(props) {
@@ -16,6 +20,7 @@ class App extends Component {
     this.state = {
       isOpened:false,
       graphOpen:false,
+      buttonContainer:'none',
       csvData: [],
       graphData:[]
     }
@@ -30,7 +35,7 @@ class App extends Component {
   organizeData(data){
     let dataObj = {};
     const keys = [];
-    let counter = 0;
+    // let counter = 0;
     const dataArr = []
     let count = 0;
 
@@ -75,45 +80,52 @@ class App extends Component {
     const graphData = this.graphInput(data);
     const organizedData = this.organizeData(data);
     console.log('organizedData',organizedData)
+
+
     this.setState({
       csvData: data,
-      graphData:graphData
-    })
+      graphData:graphData,
+      isOpened:true,
+      buttonContainer:'block'
+      })
   };
 
   buttonTableHandler(){
      !this.state.isOpened ? this.setState({isOpened:true}):this.setState({isOpened:false})
   }
+
   buttonGraphHandler(){
      !this.state.graphOpen ? this.setState({graphOpen:true}):this.setState({graphOpen:false})
   }
 
-
-
   render() {
+
     let buttonTitle;
-    !this.state.isOpened ? buttonTitle = 'Open the table' : buttonTitle = 'Collapse the table'
+    !this.state.isOpened ? buttonTitle = 'Open table' : buttonTitle = 'Collapse table'
+
     return (
       <div className="App">
-      <div className="container">
+        <div className="container">
          <CSVReader
            cssClass="react-csv-input"
-           label="Import the csv file"
+           label = "PLEASE UPLOAD CSV FILE"
+           inputId ="file_upload"
            onFileLoaded={this.loadFile}
          />
        </div>
-       <div className = 'newTable'>
-      {/* <SimpleTable data = {this.state.csvData}/> */}
-       </div>
-       <div >
-         <Button variant="contained" color="secondary" onClick={this.buttonTableHandler}>
+
+       <div style = {{display: this.state.buttonContainer}} className = 'buttonContainer'>
+         <Button style={style.button} variant="contained" color="primary" onClick={this.buttonTableHandler}>
             {buttonTitle}
          </Button>
-       </div>
-
-       <div style = {{marginTop:10,paddingTop:20}}>
-         <Button variant="contained" color="secondary" onClick={this.buttonGraphHandler}>
+         <Button style={style.button} variant="contained" color="primary" onClick={this.buttonGraphHandler}>
             Graph Collapse
+         </Button>
+         <Button style={style.button} variant="contained" color="secondary" onClick={this.buttonGraphHandler}>
+            Filter the table
+         </Button>
+         <Button style={style.button} variant="contained" color="secondary" onClick={this.buttonGraphHandler}>
+            visualize
          </Button>
        </div>
 
