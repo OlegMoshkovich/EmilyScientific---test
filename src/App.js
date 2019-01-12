@@ -15,42 +15,49 @@ class App extends Component {
     super(props);
     this.state = {
       isOpened:false,
+      graphOpen:false,
       csvData: [],
       graphData:[]
     }
     this.loadFile = this.loadFile.bind(this);
-    this.buttonNameHandler = this.buttonNameHandler.bind(this);
+    this.buttonTableHandler = this.buttonTableHandler.bind(this);
+    this.buttonGraphHandler = this.buttonGraphHandler.bind(this);
+    this.graphInput = this.graphInput.bind(this);
+
+
   }
 
-  loadFile(data){
-    const graphData = [];
-    let newArr =[];
+  organizeData(data){
     let dataObj = {};
     const keys = [];
     let counter = 0;
     const dataArr = []
     let count = 0;
 
-
-      data.map((element,index)=>{
-        dataObj['id'] = index
-        if (index === 0){
-          for(let key of element){
-            keys.push(key)
-          }
-        }else{
-          for(let key of element){
-            dataObj[keys[count]] = key;
-            count++;
-          }
-          count = 0
-          dataArr.push(dataObj)
-          dataObj = {};
+    data.map((element,index)=>{
+      dataObj['id'] = index
+      if (index === 0){
+        for(let key of element){
+          keys.push(key)
         }
-        return dataArr
+      }else{
+        for(let key of element){
+          dataObj[keys[count]] = key;
+          count++;
+        }
+        count = 0
+        dataArr.push(dataObj)
+        dataObj = {};
+      }
+      return dataArr
     })
+    return dataArr
+  }
 
-
+  graphInput(data){
+    let counter = 0;
+    const graphData = [];
+    let newArr =[];
     for (let row in data){
       if(counter === 0){
         newArr = [data[row][0],data[row][1],data[row][2],data[row][3],data[row][4]]
@@ -61,17 +68,26 @@ class App extends Component {
       graphData.push(newArr)
       counter++;
     }
+    return graphData
+  }
 
-
+  loadFile(data){
+    const graphData = this.graphInput(data);
+    const organizedData = this.organizeData(data);
+    console.log('organizedData',organizedData)
     this.setState({
       csvData: data,
       graphData:graphData
     })
   };
 
-  buttonNameHandler(){
+  buttonTableHandler(){
      !this.state.isOpened ? this.setState({isOpened:true}):this.setState({isOpened:false})
   }
+  buttonGraphHandler(){
+     !this.state.graphOpen ? this.setState({graphOpen:true}):this.setState({graphOpen:false})
+  }
+
 
 
   render() {
@@ -90,20 +106,23 @@ class App extends Component {
       {/* <SimpleTable data = {this.state.csvData}/> */}
        </div>
        <div >
-         <Button variant="contained" color="secondary"onClick={this.buttonNameHandler}>
+         <Button variant="contained" color="secondary" onClick={this.buttonTableHandler}>
             {buttonTitle}
          </Button>
        </div>
+
        <div style = {{marginTop:10,paddingTop:20}}>
-         <Button variant="contained" color="secondary" onClick={this.populateGraph}>
-            graph
+         <Button variant="contained" color="secondary" onClick={this.buttonGraphHandler}>
+            Graph Collapse
          </Button>
        </div>
+
        <Collapse isOpened={this.state.isOpened}>
         <EnhancedTable data = {this.state.csvData}/>
        </Collapse>
 
        {/* */}
+       <Collapse isOpened={this.state.graphOpen}>
          <Chart
            chartType="ScatterChart"
            data={this.state.graphData}
@@ -111,6 +130,7 @@ class App extends Component {
            height="400px"
            legendToggle
          />
+        </Collapse>
 
 
 
