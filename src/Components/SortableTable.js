@@ -39,7 +39,6 @@ function stableSort(array, cmp) {
   });
   return stabilizedThis.map(el => el[0]);
 }
-
 function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
@@ -51,9 +50,9 @@ function createRows(headers){
   rows.push({
     id: 'id', numeric: true, disablePadding: false, label: 'id'
   })
-  headers.map((header) => {
+  headers.map((column) => {
     return rows.push({
-      id: header, numeric: false, disablePadding: false, label: header
+      id: column, numeric: false, disablePadding: false, label: column
     })
   })
 
@@ -206,44 +205,21 @@ class EnhancedTable extends React.Component {
     order: 'asc',
     orderBy: 'calories',
     selected: [],
-    data: [
-    ],
+    data: [],
     receivedData:[],
     page: 0,
     rowsPerPage: 10,
   };
 
   componentDidUpdate(prevProps) {
-    // let counter = 0;
-    let dataObj = {};
-    const keys = []
-    const dataArr = []
-    let count = 0;
-    // let id
-    const data = this.props.data;
-      data.map((element,index)=>{
-        dataObj['id'] = index
-        if (index === 0){
-          for(let key of element){
-            keys.push(key)
-          }
-        }else{
-          for(let key of element){
-            dataObj[keys[count]] = key;
-            count++;
-          }
-          count = 0
-          dataArr.push(dataObj)
-          dataObj = {};
-        }
-        return dataArr
-    })
+
 
     if (this.props.data !== prevProps.data) {
-    this.setState({ data: dataArr})
+      this.setState({ data: this.props.dataArr})
     }
-    createRows(keys);
+    createRows(this.props.keys);
 }
+
 
   handleRequestSort = (event, property) => {
     const orderBy = property;

@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button'
 import {Collapse} from 'react-collapse'
 import { Chart } from "react-google-charts";
 import CheckboxList from './Components/CheckBoxList'
-import SimplePopover from "./Components/PopoverMenu"
+
 import Popover from '@material-ui/core/Popover'
 
 
@@ -30,7 +30,9 @@ class App extends Component {
       graphData:[],
       anchorEl: null,
       elementsToGraph: [],
-      keys:[]
+      keys:[],
+      dataArr:[]
+
     }
     this.loadFile = this.loadFile.bind(this);
     this.buttonTableHandler = this.buttonTableHandler.bind(this);
@@ -38,9 +40,9 @@ class App extends Component {
     this.graphInput = this.graphInput.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.gatherKeys = this.gatherKeys.bind(this);
+    // this.gatherKeys = this.gatherKeys.bind(this);
     this.handleCheckedBoxes = this.handleCheckedBoxes.bind(this);
-
+    this.createDataObj = this.createDataObj.bind(this);
   }
 
   buttonTableHandler(){
@@ -61,23 +63,32 @@ class App extends Component {
   };
   handleClose = () => {
     !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
-    !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
-    console.log('activating handle close')
+    // !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
     this.setState({
       anchorEl: null,
     });
-    this.graphInputTest(this.state.csvData,this.state.elementsToGraph);
   }
 
-  gatherKeys(data){
-    const keys = [];
-    data.map((key)=>{
-        keys.push(key)
-    })
-    this.setState({keys:keys})
-   }
-  graphInput(data){
+   createDataObj(data){
+     let count = 0;
+     let dataObj = {};
+     const dataArr = [];
+     const keys = data.shift();
 
+     data.map((element,index)=>{
+       dataObj['id'] = index
+       for(let key of element){
+          dataObj[keys[count]] = key;
+          count++;
+         }
+         dataArr.push(dataObj)
+         count = 0
+         dataObj = {};
+       })
+       this.setState({dataArr,keys})
+     }
+
+  graphInput(data){
     let counter = 0;
     const graphData = [];
     let newArr =[];
@@ -92,10 +103,14 @@ class App extends Component {
       graphData.push(newArr)
       counter++;
     }
-    console.log(graphData)
+
     return graphData
   }
+
   loadFile(data){
+
+    // this.gatherKeys(data[0]);
+    this.createDataObj(data)
     const graphData = this.graphInput(data);
     this.setState({
       csvData: data,
@@ -103,8 +118,8 @@ class App extends Component {
       tableIsOpened:true,
       buttonContainer:'block'
       })
-      this.gatherKeys(data[0]);
-  };
+
+    };
 
 
 
@@ -158,7 +173,7 @@ class App extends Component {
        </Popover>
 
        <Collapse isOpened={this.state.tableIsOpened}>
-        <EnhancedTable data = {this.state.csvData}/>
+        <EnhancedTable data = {this.state.csvData} dataArr = {this.state.dataArr} keys = {this.state.keys}/>
        </Collapse>
 
        {/* */}
