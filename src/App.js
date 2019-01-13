@@ -43,6 +43,7 @@ class App extends Component {
     // this.gatherKeys = this.gatherKeys.bind(this);
     this.handleCheckedBoxes = this.handleCheckedBoxes.bind(this);
     this.createDataObj = this.createDataObj.bind(this);
+    // this.analyzeData = this.analyzeData.bind(this);
   }
 
   buttonTableHandler(){
@@ -69,59 +70,87 @@ class App extends Component {
     });
   }
 
-   createDataObj(data){
+  createDataObj(data){
      let count = 0;
      let dataObj = {};
+     let dataObjConv = {};
+     const dataArrConv = [];
      const dataArr = [];
      const keys = data.shift();
+     
+     data.map((row) =>{
+        row.map((element,index)=>{
+          dataObj['id'] = index;
+          isNaN(Number(element)) ? dataObj[keys[index]] = element:dataObj[keys[index]] = Number(element)
+        })
+        dataArr.push(dataObj);
+     })
 
-     data.map((element,index)=>{
-       dataObj['id'] = index
-       for(let key of element){
-          dataObj[keys[count]] = key;
-          count++;
-         }
-         dataArr.push(dataObj)
-         count = 0
-         dataObj = {};
-       })
        this.setState({dataArr,keys})
+
      }
 
-  graphInput(data){
-    let counter = 0;
-    const graphData = [];
-    let newArr =[];
+  graphInput(data,keys = []){
 
-    for (let row in data){
-      if(counter === 0){
-        newArr = [data[row][0],data[row][1],data[row][2],data[row][3],data[row][4]]
-      }
-      else{
-        newArr = [parseInt(data[row][0]),parseInt(data[row][1]),parseInt(data[row][2]),parseInt(data[row][3]),parseInt(data[row][4]),]
-      }
-      graphData.push(newArr)
-      counter++;
-    }
-
-    return graphData
   }
 
-  loadFile(data){
+  // analyzeData(data,keys = []){
+  //   const newArray = [];
+  //   const convArr = [];
+  //   const numbersArray = [];
+  //   const stringsArray = [];
+  //   const dataTypes = [];
+  //   const dataTypesObj = {};
+  //   const strings = [];
+  //   const numbers = [];
+  //   let arr = [];
+  //   //Map over the original data array and convert the whole array to number
+  //
+  //   data.map((row) =>{
+  //      row.map((element,index)=>{
+  //        isNaN(Number(element)) ? arr.push(element):arr.push(Number(element))
+  //      })
+  //      convArr.push(arr);
+  //      arr = []
+  //   })
+  //
+  //   console.log('converted array', convArr)
+  //   //Populate numbers array with numbers filtered from the original array
+  //   newArray.map((row) =>{
+  //     numbersArray.push(row.filter(element => isNaN(element) === false));
+  //   })
+  //
+  //   newArray[0].map((element,index) =>{
+  //     isNaN(element) ? dataTypesObj[keys[index]] = 'string':dataTypesObj[keys[index]] = 'number'
+  //     isNaN(element) ? dataTypes.push('string'):dataTypes.push('number')
+  //     isNaN(element) ? strings.push(index):numbers.push(index)
+  //   })
+  //   data.map((row) =>{
+  //     row.map((element,index) =>{
+  //        if (strings.includes(index)){
+  //          arr.push(element);
+  //        }
+  //     })
+  //     stringsArray.push(arr);
+  //     arr = []
+  //   })
+  //
+  //   console.log('strings',stringsArray)
+  //   console.log('numbers',numbersArray)
+  //
+  //   return
+  // }
 
-    // this.gatherKeys(data[0]);
+  loadFile(data){
     this.createDataObj(data)
-    const graphData = this.graphInput(data);
     this.setState({
       csvData: data,
-      graphData:graphData,
+      // graphData:graphData,
       tableIsOpened:true,
       buttonContainer:'block'
       })
-
+    // this.analyzeData(data, this.state.keys);
     };
-
-
 
   render() {
     const { anchorEl } = this.state;
