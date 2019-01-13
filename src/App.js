@@ -3,8 +3,12 @@ import CSVReader from "react-csv-reader";
 import EnhancedTable from './Components/SortableTable'
 import './App.css';
 import Button from '@material-ui/core/Button'
-import {Collapse} from 'react-collapse';
+import {Collapse} from 'react-collapse'
 import { Chart } from "react-google-charts";
+import CheckboxList from './Components/CheckBoxList'
+import SimplePopover from "./Components/PopoverMenu"
+import Popover from '@material-ui/core/Popover'
+
 
 let style = {
   button:{
@@ -22,29 +26,53 @@ class App extends Component {
       graphOpen:false,
       buttonContainer:'none',
       csvData: [],
-      graphData:[]
+      graphData:[],
+      anchorEl: null,
+      keys:[]
     }
     this.loadFile = this.loadFile.bind(this);
     this.buttonTableHandler = this.buttonTableHandler.bind(this);
     this.buttonGraphHandler = this.buttonGraphHandler.bind(this);
     this.graphInput = this.graphInput.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.gatherKeys = this.gatherKeys.bind(this);
+  }
 
+  handleClick = event => {
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
+  };
 
+  handleClose = () => {
+    this.setState({
+      anchorEl: null,
+    });
+  };
+
+  gatherKeys(data){
+    const keys = [];
+    for(let key of data){
+      keys.push(key)
+    }
+    console.log('keys',keys)
+    this.setState({keys:keys})
+    return keys
   }
 
   organizeData(data){
     let dataObj = {};
     const keys = [];
-    // let counter = 0;
+
     const dataArr = []
     let count = 0;
 
     data.map((element,index)=>{
       dataObj['id'] = index
+
       if (index === 0){
-        for(let key of element){
-          keys.push(key)
-        }
+        this.gatherKeys(element)
       }else{
         for(let key of element){
           dataObj[keys[count]] = key;
@@ -75,13 +103,11 @@ class App extends Component {
     }
     return graphData
   }
-
   loadFile(data){
     const graphData = this.graphInput(data);
     const organizedData = this.organizeData(data);
-    console.log('organizedData',organizedData)
-
-
+    // console.log('organizedData',organizedData)
+    this.organizeData(data);
     this.setState({
       csvData: data,
       graphData:graphData,
@@ -99,6 +125,8 @@ class App extends Component {
   }
 
   render() {
+    const { anchorEl } = this.state;
+    const open = Boolean(anchorEl);
 
     let buttonTitle;
     !this.state.isOpened ? buttonTitle = 'Open table' : buttonTitle = 'Collapse table'
@@ -113,7 +141,6 @@ class App extends Component {
            onFileLoaded={this.loadFile}
          />
        </div>
-
        <div style = {{display: this.state.buttonContainer}} className = 'buttonContainer'>
          <Button style={style.button} variant="contained" color="primary" onClick={this.buttonTableHandler}>
             {buttonTitle}
@@ -124,10 +151,29 @@ class App extends Component {
          <Button style={style.button} variant="contained" color="secondary" onClick={this.buttonGraphHandler}>
             Filter the table
          </Button>
-         <Button style={style.button} variant="contained" color="secondary" onClick={this.buttonGraphHandler}>
-            visualize
+         <Button style={style.button} variant="contained" color="secondary"   onClick={this.handleClick}>
+            visualizer
          </Button>
+
        </div>
+
+       <Popover
+         id="simple-popper"
+
+         open={open}
+         anchorEl={anchorEl}
+         onClose={this.handleClose}
+         anchorOrigin={{
+           vertical: 'bottom',
+           horizontal: 'center',
+         }}
+         transformOrigin={{
+           vertical: 'top',
+           horizontal: 'center',
+         }}
+       >
+         <CheckboxList keys ={this.state.keys}/>
+       </Popover>
 
        <Collapse isOpened={this.state.isOpened}>
         <EnhancedTable data = {this.state.csvData}/>
