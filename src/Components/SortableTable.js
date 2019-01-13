@@ -19,11 +19,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 // import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
-// let counter = 0;
-// function createData(name, calories, fat, carbs, protein) {
-//   counter += 1;
-//   return { id: counter, name, calories, fat, carbs, protein };
-// }
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -49,13 +44,7 @@ function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-let rows = [
-  // { id: 'id', numeric: false, disablePadding: false, label: 'id' },
-  // { id: 'first', numeric: false, disablePadding: false, label: 'first' },
-  // { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-  // { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-  // { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
-];
+let rows = [];
 
 function createRows(headers){
   rows = [];

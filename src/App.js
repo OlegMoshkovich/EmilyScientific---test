@@ -22,12 +22,14 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpened:false,
-      graphOpen:false,
+      tableIsOpened:false,
+      VizIsOpened: true,
+      graphOpen:true,
       buttonContainer:'none',
       csvData: [],
       graphData:[],
       anchorEl: null,
+      elementsToGraph: [],
       keys:[]
     }
     this.loadFile = this.loadFile.bind(this);
@@ -37,60 +39,49 @@ class App extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.gatherKeys = this.gatherKeys.bind(this);
+    this.handleCheckedBoxes = this.handleCheckedBoxes.bind(this);
+
   }
 
+  buttonTableHandler(){
+     !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
+  }
+  buttonGraphHandler(){
+     !this.state.graphOpen ? this.setState({graphOpen:true}):this.setState({graphOpen:false})
+  }
+  handleCheckedBoxes(checkedBoxes){
+    this.setState({elementsToGraph:checkedBoxes})
+  }
   handleClick = event => {
+    !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
+
     this.setState({
       anchorEl: event.currentTarget,
     });
   };
-
   handleClose = () => {
+    !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
+    !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
+    console.log('activating handle close')
     this.setState({
       anchorEl: null,
     });
-  };
+    this.graphInputTest(this.state.csvData,this.state.elementsToGraph);
+  }
 
   gatherKeys(data){
     const keys = [];
-    for(let key of data){
-      keys.push(key)
-    }
-    console.log('keys',keys)
-    this.setState({keys:keys})
-    return keys
-  }
-
-  organizeData(data){
-    let dataObj = {};
-    const keys = [];
-
-    const dataArr = []
-    let count = 0;
-
-    data.map((element,index)=>{
-      dataObj['id'] = index
-
-      if (index === 0){
-        this.gatherKeys(element)
-      }else{
-        for(let key of element){
-          dataObj[keys[count]] = key;
-          count++;
-        }
-        count = 0
-        dataArr.push(dataObj)
-        dataObj = {};
-      }
-      return dataArr
+    data.map((key)=>{
+        keys.push(key)
     })
-    return dataArr
-  }
-
+    this.setState({keys:keys})
+   }
   graphInput(data){
+
     let counter = 0;
     const graphData = [];
     let newArr =[];
+
     for (let row in data){
       if(counter === 0){
         newArr = [data[row][0],data[row][1],data[row][2],data[row][3],data[row][4]]
@@ -101,35 +92,29 @@ class App extends Component {
       graphData.push(newArr)
       counter++;
     }
+    console.log(graphData)
     return graphData
   }
   loadFile(data){
     const graphData = this.graphInput(data);
-    const organizedData = this.organizeData(data);
-    // console.log('organizedData',organizedData)
-    this.organizeData(data);
     this.setState({
       csvData: data,
       graphData:graphData,
-      isOpened:true,
+      tableIsOpened:true,
       buttonContainer:'block'
       })
+      this.gatherKeys(data[0]);
   };
 
-  buttonTableHandler(){
-     !this.state.isOpened ? this.setState({isOpened:true}):this.setState({isOpened:false})
-  }
 
-  buttonGraphHandler(){
-     !this.state.graphOpen ? this.setState({graphOpen:true}):this.setState({graphOpen:false})
-  }
 
   render() {
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
-
-    let buttonTitle;
-    !this.state.isOpened ? buttonTitle = 'Open table' : buttonTitle = 'Collapse table'
+    let tableButtonTitle;
+    let vizButtonTitle;
+    !this.state.tableIsOpened ? tableButtonTitle = 'Open table' : tableButtonTitle = 'Collapse table'
+    !this.state.vizIsOpened ? vizButtonTitle = 'Viz' : vizButtonTitle = 'Make a graph'
 
     return (
       <div className="App">
@@ -138,28 +123,26 @@ class App extends Component {
            cssClass="react-csv-input"
            label = "PLEASE UPLOAD CSV FILE"
            inputId ="file_upload"
-           onFileLoaded={this.loadFile}
-         />
+           onFileLoaded={this.loadFile}/>
        </div>
+
        <div style = {{display: this.state.buttonContainer}} className = 'buttonContainer'>
          <Button style={style.button} variant="contained" color="primary" onClick={this.buttonTableHandler}>
-            {buttonTitle}
+            {tableButtonTitle}
          </Button>
          <Button style={style.button} variant="contained" color="primary" onClick={this.buttonGraphHandler}>
             Graph Collapse
          </Button>
-         <Button style={style.button} variant="contained" color="secondary" onClick={this.buttonGraphHandler}>
+         <Button style={style.button} variant="contained" color="primary" >
             Filter the table
          </Button>
          <Button style={style.button} variant="contained" color="secondary"   onClick={this.handleClick}>
-            visualizer
+            {vizButtonTitle}
          </Button>
-
        </div>
 
        <Popover
          id="simple-popper"
-
          open={open}
          anchorEl={anchorEl}
          onClose={this.handleClose}
@@ -170,12 +153,11 @@ class App extends Component {
          transformOrigin={{
            vertical: 'top',
            horizontal: 'center',
-         }}
-       >
-         <CheckboxList keys ={this.state.keys}/>
+         }}>
+         <CheckboxList keys ={this.state.keys} handleCheckedBoxes = {this.handleCheckedBoxes} />
        </Popover>
 
-       <Collapse isOpened={this.state.isOpened}>
+       <Collapse isOpened={this.state.tableIsOpened}>
         <EnhancedTable data = {this.state.csvData}/>
        </Collapse>
 

@@ -19,7 +19,7 @@ const styles = theme => ({
 
 class CheckboxList extends React.Component {
   state = {
-    checked: [0],
+    checked: [],
   };
 
   handleToggle = value => () => {
@@ -36,15 +36,16 @@ class CheckboxList extends React.Component {
     this.setState({
       checked: newChecked,
     });
+
+    this.props.handleCheckedBoxes(this.state.checked)
+
+
   };
 
+
+
   render() {
-
     const { classes } = this.props;
-    console.log("checkBoxLIst",this.state.checked)
-    console.log('popover menu',this.props)
-
-
     return (
       <List className={classes.root}>
         {this.props.keys.map(value => (
