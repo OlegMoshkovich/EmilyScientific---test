@@ -180,11 +180,12 @@ class App extends Component {
     const open2 = Boolean(anchorEl2);
 
     const options = {
-      filterType: 'checkbox',
+       filterType: "dropdown",
        filter: true,
        sort: true,
        download:false,
-
+       print:false,
+       resizableColumns:false,
     };
 
     let tableButtonTitle;
@@ -220,6 +221,9 @@ class App extends Component {
        </div>
 
        <div style = {{display: this.state.buttonVizContainer}} className = 'buttonVizContainer'>
+       <Button style={style.button} variant="contained" disabled = {true} color="primary" onClick={this.handleClickPrimary}>
+          Graph Type
+       </Button>
          <Button style={style.button} variant="contained"  color="primary" onClick={this.handleClickPrimary}>
             Primary Axis
          </Button>
