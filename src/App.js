@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import CSVReader from "react-csv-reader";
-import EnhancedTable from './Components/SortableTable'
+// import EnhancedTable from './Components/SortableTable'
+import CheckboxList from './Components/CheckBoxList'
+import Popover from '@material-ui/core/Popover'
+// import SelectedListItem from './Components/SelectedList'
 import './App.css';
 import Button from '@material-ui/core/Button'
 import {Collapse} from 'react-collapse'
 import { Chart } from "react-google-charts";
-import CheckboxList from './Components/CheckBoxList'
-import Popover from '@material-ui/core/Popover'
-import SelectedListItem from './Components/SelectedList'
 import MUIDataTable from "mui-datatables";
 
 let style = {
@@ -77,10 +77,10 @@ class App extends Component {
     };
   // organizes csv data - array of arrays in to the array of object - as well as separates number from string
   createDataObj(data){
-       let count = 0;
+
        let dataObj = {};
-       let dataObjConv = {};
-       const dataArrConv = [];
+
+
        const dataArr = [];
        const keys = data.shift();
        const numberKeys = [];
@@ -96,15 +96,19 @@ class App extends Component {
           if(index === 0){
             row.map((element,index)=>{
               isNaN(Number(element)) ? stringKeys.push(keys[index]) : numberKeys.push(keys[index])
+
+              return stringKeys
             })
             stringKeys.push('id');
           }
           //convert the strings extrated from the csv file into the string and number data types
           row.map((element,index)=>{
             isNaN(Number(element)) ? dataObj[keys[index]] = element:dataObj[keys[index]] = Number(element)
+            return dataObj
           })
           dataArr.push(dataObj)
           dataObj = {};
+          return dataArr
        })
          this.setState({dataArr, keys, numberKeys, stringKeys})
          return data
@@ -119,6 +123,7 @@ class App extends Component {
        }
        graphData.push(graphRow)
        graphRow = [];
+       return graphData
      })
      this.setState({graphData})
    }
