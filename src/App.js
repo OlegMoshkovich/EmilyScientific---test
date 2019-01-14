@@ -22,7 +22,7 @@ class App extends Component {
     this.state = {
       tableIsOpened:false,
       VizIsOpened: true,
-      graphOpen:true,
+      graphOpen:false,
       buttonContainer:'none',
       csvData: [],
       graphData:[],
@@ -63,7 +63,8 @@ class App extends Component {
     this.setState({
       anchorEl: null,
     });
-    console.log('these are all checked',this.state.elementsToGraph)
+
+    this.graphInput(this.state.dataArr,this.state.elementsToGraph)
   }
 
   createDataObj(data){
@@ -86,6 +87,20 @@ class App extends Component {
      }
 
   graphInput(data,keys = []){
+    let graphData = [keys];
+    let graphRow = [];
+
+    console.log('data --- ', data)
+    data.map((row) =>{
+      for (let key of keys){
+        graphRow.push(row[key]);
+      }
+      console.log('graphRow',graphRow)
+      graphData.push(graphRow)
+      graphRow = [];
+
+    })
+    this.setState({graphData})
 
   }
 
