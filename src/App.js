@@ -10,7 +10,6 @@ import Popover from '@material-ui/core/Popover'
 import SelectedListItem from './Components/SelectedList'
 import MUIDataTable from "mui-datatables";
 
-
 let style = {
   button:{
     margin:'10px',
@@ -26,8 +25,10 @@ class App extends Component {
       tableIsOpened:false,
       vizIsOpened: true,
       graphOpen:false,
+      statisticsOpen:false,
       buttonContainer:'none',
       buttonVizContainer:'none',
+      statisticsContainer:'none',
       csvData: [],
       graphData:[],
       anchorEl: null,
@@ -41,7 +42,6 @@ class App extends Component {
       dataArr:[],
       modifiedKeys:[],
       modifiedData:[]
-
     }
     this.loadFile = this.loadFile.bind(this);
     this.buttonTableHandler = this.buttonTableHandler.bind(this);
@@ -62,9 +62,14 @@ class App extends Component {
   buttonGraphHandler(){
      !this.state.graphOpen ? this.setState({graphOpen:true}):this.setState({graphOpen:false})
   }
+  buttonStatisticsHandler(){
+     this.state.statisticsOpen ? this.setState({statisticsOpen:true}):this.setState({statisticsOpen:false})
+  }
   handleCheckedBoxes(checkedBox){
     this.state.elementsToGraph.push(checkedBox)
   }
+
+
 
   handleClickPrimary = event => {
     this.setState({
@@ -109,7 +114,6 @@ class App extends Component {
       }
     }
 
-
   createDataObj(data){
      let count = 0;
      let dataObj = {};
@@ -117,10 +121,8 @@ class App extends Component {
      const dataArrConv = [];
      const dataArr = [];
      const keys = data.shift();
-
      const numberKeys = [];
      const stringKeys = [];
-     console.log('data-------',data);
      this.setState({modifiedKeys:['id', ...keys]})
 
 
@@ -168,17 +170,13 @@ class App extends Component {
       tableIsOpened:true,
       buttonContainer:'block'
       })
-
-      // console.log('csvData-------',this.state.csvData);
       this.setState({modifiedData:modifiedData})
-
     };
 
   render() {
     const { anchorEl,anchorEl2 } = this.state;
     const open = Boolean(anchorEl);
     const open2 = Boolean(anchorEl2);
-
     const options = {
        filterType: "dropdown",
        filter: true,
@@ -218,12 +216,15 @@ class App extends Component {
          <Button style={style.button} variant="contained" color={color} onClick={this.buttonVizHandler}>
             {vizButtonTitle}
          </Button>
+         <Button style={style.button} variant="contained" color={color} disabled = {true} onClick={this.buttonStatisticsHandler}>
+            Statistics
+         </Button>
        </div>
 
        <div style = {{display: this.state.buttonVizContainer}} className = 'buttonVizContainer'>
-       <Button style={style.button} variant="contained" disabled = {true} color="primary" onClick={this.handleClickPrimary}>
+         <Button style={style.button} variant="contained" disabled = {true} color="primary" onClick={this.handleClickPrimary}>
           Graph Type
-       </Button>
+         </Button>
          <Button style={style.button} variant="contained"  color="primary" onClick={this.handleClickPrimary}>
             Primary Axis
          </Button>
@@ -231,7 +232,10 @@ class App extends Component {
             Secondary Axis
          </Button>
          <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>PLEASE SELECT A SINGLE PRIMARY VALUE AND MULTIPLE SECONDARY VALUES - IF YOU WISH.</div>
+       </div>
 
+       <div style = {{display: this.state.statisticsContainer}} className = 'statisticsContainer'>
+         <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>statistics</div>
        </div>
 
        <Popover
@@ -268,8 +272,11 @@ class App extends Component {
 
        <Collapse isOpened={this.state.tableIsOpened}>
        {/*
-          <EnhancedTable data = {this.state.csvData} dataArr = {this.state.dataArr} keys = {this.state.keys}/>
+         <div style={{margin:'40px'}}>
+           <EnhancedTable data = {this.state.csvData} dataArr = {this.state.dataArr} keys = {this.state.keys}/>
+         </div>
        */}
+
         <div style={{margin:'40px'}}>
           <MUIDataTable
             title={""}

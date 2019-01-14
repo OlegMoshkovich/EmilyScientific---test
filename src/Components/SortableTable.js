@@ -61,6 +61,7 @@ function createRows(headers){
 class EnhancedTableHead extends React.Component {
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
+    console.log('column is clicked - property ---- ', property)
   };
 
   render() {
