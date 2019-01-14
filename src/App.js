@@ -7,6 +7,9 @@ import {Collapse} from 'react-collapse'
 import { Chart } from "react-google-charts";
 import CheckboxList from './Components/CheckBoxList'
 import Popover from '@material-ui/core/Popover'
+import SelectedListItem from './Components/SelectedList'
+import MUIDataTable from "mui-datatables";
+
 
 let style = {
   button:{
@@ -35,7 +38,9 @@ class App extends Component {
       keys:[],
       numberkeys:[],
       stringKeys:[],
-      dataArr:[]
+      dataArr:[],
+      modifiedKeys:[],
+      modifiedData:[]
 
     }
     this.loadFile = this.loadFile.bind(this);
@@ -57,11 +62,9 @@ class App extends Component {
   buttonGraphHandler(){
      !this.state.graphOpen ? this.setState({graphOpen:true}):this.setState({graphOpen:false})
   }
-
   handleCheckedBoxes(checkedBox){
     this.state.elementsToGraph.push(checkedBox)
-      }
-
+  }
 
   handleClickPrimary = event => {
     this.setState({
@@ -92,6 +95,7 @@ class App extends Component {
     this.setState({
       anchorEl2: null,
       graphOpen:true,
+      secondary:true
     });
     this.graphInput(this.state.dataArr,this.state.elementsToGraph)
   }
@@ -105,6 +109,7 @@ class App extends Component {
       }
     }
 
+
   createDataObj(data){
      let count = 0;
      let dataObj = {};
@@ -112,8 +117,12 @@ class App extends Component {
      const dataArrConv = [];
      const dataArr = [];
      const keys = data.shift();
+
      const numberKeys = [];
      const stringKeys = [];
+     console.log('data-------',data);
+     this.setState({modifiedKeys:['id', ...keys]})
+
 
      data.map((row, index) =>{
         dataObj['id'] = index+1;
@@ -148,11 +157,21 @@ class App extends Component {
 
   loadFile(data){
     this.createDataObj(data)
+    const modifiedData = data;
+
+    modifiedData.map((element,index) =>{
+      return element.unshift(index)
+    })
+    console.log('modified data', modifiedData)
     this.setState({
       csvData: data,
       tableIsOpened:true,
       buttonContainer:'block'
       })
+
+      // console.log('csvData-------',this.state.csvData);
+      this.setState({modifiedData:modifiedData})
+
     };
 
   render() {
@@ -160,18 +179,27 @@ class App extends Component {
     const open = Boolean(anchorEl);
     const open2 = Boolean(anchorEl2);
 
+    const options = {
+      filterType: 'checkbox',
+       filter: true,
+       sort: true,
+       download:false,
+
+    };
+
     let tableButtonTitle;
     let vizButtonTitle;
     let graphButtonTitle;
     let color;
-    !this.state.tableIsOpened ? tableButtonTitle = 'Expand table' : tableButtonTitle = 'Collapse table'
+    this.state.tableIsOpened ? tableButtonTitle = 'Collapse table' : tableButtonTitle = 'Expand table'
     this.state.vizIsOpened ? vizButtonTitle = 'Vizualizer' : vizButtonTitle = 'Collapse Viz Menu'
     this.state.vizIsOpened ? color = 'primary' : color = 'secondary'
-    !this.state.graphOpen ? graphButtonTitle = 'Expand graph' : graphButtonTitle = 'Collapse graph'
+    this.state.graphOpen ? graphButtonTitle = 'Collapse graph' : graphButtonTitle = 'Expand graph'
 
     return (
       <div className="App">
-        <div className="container">
+
+       <div className="container">
          <CSVReader
            cssClass="react-csv-input"
            label = "PLEASE UPLOAD CSV FILE"
@@ -183,12 +211,9 @@ class App extends Component {
          <Button style={style.button} variant="contained" color="primary" onClick={this.buttonTableHandler}>
             {tableButtonTitle}
          </Button>
-
          <Button style={style.button}  variant="contained" color="primary" onClick={this.buttonGraphHandler}>
             {graphButtonTitle}
          </Button>
-
-
          <Button style={style.button} variant="contained" color={color} onClick={this.buttonVizHandler}>
             {vizButtonTitle}
          </Button>
@@ -201,7 +226,7 @@ class App extends Component {
          <Button style={style.button} variant="contained" disabled = {this.state.secondary} color="primary" onClick={this.handleClickSecondary}>
             Secondary Axis
          </Button>
-         <div>{this.state.graphData[0]}</div>
+         <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>PLEASE SELECT A SINGLE PRIMARY VALUE AND MULTIPLE SECONDARY VALUES - IF YOU WISH.</div>
 
        </div>
 
@@ -219,7 +244,6 @@ class App extends Component {
             horizontal: 'center',
           }}>
          <CheckboxList keys ={this.state.stringKeys} handleCheckedBoxes = {this.handleCheckedBoxes} />
-
        </Popover>
 
        <Popover
@@ -238,28 +262,32 @@ class App extends Component {
          <CheckboxList keys ={this.state.numberKeys} handleCheckedBoxes = {this.handleCheckedBoxes} />
        </Popover>
 
-
-
-
        <Collapse isOpened={this.state.tableIsOpened}>
-        <EnhancedTable data = {this.state.csvData} dataArr = {this.state.dataArr} keys = {this.state.keys}/>
+       {/*
+          <EnhancedTable data = {this.state.csvData} dataArr = {this.state.dataArr} keys = {this.state.keys}/>
+       */}
+        <div style={{margin:'40px'}}>
+          <MUIDataTable
+            title={""}
+            data={this.state.modifiedData}
+            columns={this.state.modifiedKeys}
+            options={options}
+          />
+        </div>
        </Collapse>
 
-       {/* */}
-       <Collapse isOpened={this.state.graphOpen}>
-         <Chart
-           chartType="AreaChart"
-           data={this.state.graphData}
-           width="100%"
-           height="400px"
-           legendToggle
-         />
-
-        </Collapse>
 
 
-
-
+       <div style={{margin:'40px'}}>
+         <Collapse isOpened={this.state.graphOpen}>
+           <Chart
+             chartType="Scatter"
+             data={this.state.graphData}
+             width="100%"
+             height="400px"
+             legendToggle/>
+          </Collapse>
+        </div>
 
       </div>
     );
