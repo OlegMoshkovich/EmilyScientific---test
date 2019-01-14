@@ -56,6 +56,74 @@ class App extends Component {
     this.buttonVizHandler = this.buttonVizHandler.bind(this);
   }
 
+  //first callback that is called when csv file is loaded
+  loadFile(data){
+    //after the createdDataObj is called the original data received from csv is separated into the header - keys and the body
+    //which is the rest of the rows
+    this.createDataObj(data)
+    //modified Data is created to be fed into the MUI table - it accepts array of arrays
+    const modifiedData = data;
+    //loop over the body portion and include index
+    modifiedData.map((element,index) =>{
+      return element.unshift(index)
+    })
+
+    this.setState({
+      csvData: data,
+      tableIsOpened:true,
+      buttonContainer:'block',
+      modifiedData:modifiedData
+      })
+    };
+  // organizes csv data - array of arrays in to the array of object - as well as separates number from string
+  createDataObj(data){
+       let count = 0;
+       let dataObj = {};
+       let dataObjConv = {};
+       const dataArrConv = [];
+       const dataArr = [];
+       const keys = data.shift();
+       const numberKeys = [];
+       const stringKeys = [];
+
+       //include 'id' into the keys array extracted from the original data array
+       this.setState({modifiedKeys:['id', ...keys]})
+
+       //map over the body portion of the data(excluding extracted keys) and create a data array that contains row object
+       data.map((row, index) =>{
+          dataObj['id'] = index+1;
+          //analize the row for the data types and separate string and numbers into two separate arrays
+          if(index === 0){
+            row.map((element,index)=>{
+              isNaN(Number(element)) ? stringKeys.push(keys[index]) : numberKeys.push(keys[index])
+            })
+            stringKeys.push('id');
+          }
+          //convert the strings extrated from the csv file into the string and number data types
+          row.map((element,index)=>{
+            isNaN(Number(element)) ? dataObj[keys[index]] = element:dataObj[keys[index]] = Number(element)
+          })
+          dataArr.push(dataObj)
+          dataObj = {};
+       })
+         this.setState({dataArr, keys, numberKeys, stringKeys})
+         return data
+       }
+  // the graphing library requires array of arrays -- prepares the data for vizualization
+  graphInput(data,keys = []){
+     let graphData = [keys];
+     let graphRow = [];
+     data.map((row) =>{
+       for (let key of keys){
+         graphRow.push(row[key]);
+       }
+       graphData.push(graphRow)
+       graphRow = [];
+     })
+     this.setState({graphData})
+   }
+
+  // Handlers for the buttons responsible for the button behavior - expand/collapse
   buttonTableHandler(){
      !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
   }
@@ -65,12 +133,21 @@ class App extends Component {
   buttonStatisticsHandler(){
      this.state.statisticsOpen ? this.setState({statisticsOpen:true}):this.setState({statisticsOpen:false})
   }
+  buttonVizHandler(){
+      !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
+      if(this.state.buttonVizContainer === 'none'){
+        this.setState({buttonVizContainer: 'block'})
+      } else {
+        this.setState({buttonVizContainer: 'none'})
+      }
+    }
+
+  //Passed to the list component to gather the properties to graph - updates states
   handleCheckedBoxes(checkedBox){
     this.state.elementsToGraph.push(checkedBox)
   }
 
-
-
+  //Handlers for the vizualizer popover called on open and closed
   handleClickPrimary = event => {
     this.setState({
       anchorEl: event.currentTarget,
@@ -84,16 +161,14 @@ class App extends Component {
     });
   };
   handleClosePrimary = () => {
-    // !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
-    // !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
+
     this.setState({
       anchorEl: null,
     });
 
   }
   handleCloseSecondary = () => {
-    // !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
-    // !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
+
     if(this.state.tableIsOpened){
       this.setState({tableIsOpened:false})
     }
@@ -105,78 +180,12 @@ class App extends Component {
     this.graphInput(this.state.dataArr,this.state.elementsToGraph)
   }
 
-  buttonVizHandler(){
-      !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
-      if(this.state.buttonVizContainer === 'none'){
-        this.setState({buttonVizContainer: 'block'})
-      } else {
-        this.setState({buttonVizContainer: 'none'})
-      }
-    }
-
-  createDataObj(data){
-     let count = 0;
-     let dataObj = {};
-     let dataObjConv = {};
-     const dataArrConv = [];
-     const dataArr = [];
-     const keys = data.shift();
-     const numberKeys = [];
-     const stringKeys = [];
-     this.setState({modifiedKeys:['id', ...keys]})
-
-
-     data.map((row, index) =>{
-        dataObj['id'] = index+1;
-        if(index === 0){
-          row.map((element,index)=>{
-            isNaN(Number(element)) ? stringKeys.push(keys[index]) : numberKeys.push(keys[index])
-          })
-          stringKeys.push('id');
-        }
-        row.map((element,index)=>{
-          isNaN(Number(element)) ? dataObj[keys[index]] = element:dataObj[keys[index]] = Number(element)
-        })
-        dataArr.push(dataObj)
-        dataObj = {};
-     })
-       this.setState({dataArr, keys, numberKeys, stringKeys})
-     }
-
-  graphInput(data,keys = []){
-    let graphData = [keys];
-    let graphRow = [];
-    data.map((row) =>{
-      for (let key of keys){
-        graphRow.push(row[key]);
-      }
-      graphData.push(graphRow)
-      graphRow = [];
-
-    })
-    this.setState({graphData})
-  }
-
-  loadFile(data){
-    this.createDataObj(data)
-    const modifiedData = data;
-
-    modifiedData.map((element,index) =>{
-      return element.unshift(index)
-    })
-    console.log('modified data', modifiedData)
-    this.setState({
-      csvData: data,
-      tableIsOpened:true,
-      buttonContainer:'block'
-      })
-      this.setState({modifiedData:modifiedData})
-    };
-
   render() {
+    //properties for the popover
     const { anchorEl,anchorEl2 } = this.state;
     const open = Boolean(anchorEl);
     const open2 = Boolean(anchorEl2);
+    //table options --
     const options = {
        filterType: "dropdown",
        filter: true,
@@ -184,12 +193,16 @@ class App extends Component {
        download:false,
        print:false,
        resizableColumns:false,
+       rowHover:false,
+       viewColumns:true,
+       onCellClick:function(colData: any, cellMeta: { colIndex: number, rowIndex: number }){console.log('column Index',cellMeta.colIndex)}
     };
-
     let tableButtonTitle;
     let vizButtonTitle;
     let graphButtonTitle;
     let color;
+
+    //Switches for the buton titles + properties
     this.state.tableIsOpened ? tableButtonTitle = 'Collapse table' : tableButtonTitle = 'Expand table'
     this.state.vizIsOpened ? vizButtonTitle = 'Vizualizer' : vizButtonTitle = 'Collapse Viz Menu'
     this.state.vizIsOpened ? color = 'primary' : color = 'secondary'
@@ -238,6 +251,7 @@ class App extends Component {
          <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>statistics</div>
        </div>
 
+       {/* Primary menu for defining the graph*/}
        <Popover
          id="simple-popper"
          open={open}
@@ -254,6 +268,7 @@ class App extends Component {
          <CheckboxList keys ={this.state.stringKeys} handleCheckedBoxes = {this.handleCheckedBoxes} />
        </Popover>
 
+       {/* Secondary menu for defining the graph*/}
        <Popover
          id="simple-popper"
          open={open2}
@@ -271,12 +286,16 @@ class App extends Component {
        </Popover>
 
        <Collapse isOpened={this.state.tableIsOpened}>
+
+
+       {/* Material enhanced table originally constructed to display data - includes sorting - later replaced by the MUI table*/}
        {/*
          <div style={{margin:'40px'}}>
            <EnhancedTable data = {this.state.csvData} dataArr = {this.state.dataArr} keys = {this.state.keys}/>
          </div>
        */}
 
+       {/* MUI data table that is a "turn key - a bit of a black box component that includes most of the requested functionality" */}
         <div style={{margin:'40px'}}>
           <MUIDataTable
             title={""}
@@ -288,7 +307,7 @@ class App extends Component {
        </Collapse>
 
 
-
+       {/* Google charting library component */}
        <div style={{margin:'40px'}}>
          <Collapse isOpened={this.state.graphOpen}>
            <Chart
