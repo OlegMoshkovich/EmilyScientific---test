@@ -33,8 +33,10 @@ class CheckboxList extends React.Component {
     this.setState({
       checked: newChecked,
     });
-    this.props.handleCheckedBoxes(newChecked)
-    
+    console.log('in the list componet -- checks',newChecked)
+    console.log('in the list componet -- checks -- CurrentIndex',value.toString())
+    return this.props.handleCheckedBoxes(value.toString())
+
   };
 
 
@@ -44,7 +46,7 @@ class CheckboxList extends React.Component {
     return (
       <List className={classes.root}>
         {this.props.keys.map(value => (
-          <ListItem key={value} role={undefined} dense button onClick={this.handleToggle(value)}>
+          <ListItem key={value} role={undefined}  dense button onClick={this.handleToggle(value)}>
             <Checkbox
               checked={this.state.checked.indexOf(value) !== -1}
               tabIndex={-1}

@@ -21,14 +21,20 @@ class App extends Component {
     super(props);
     this.state = {
       tableIsOpened:false,
-      VizIsOpened: true,
+      vizIsOpened: true,
       graphOpen:false,
       buttonContainer:'none',
+      buttonVizContainer:'none',
       csvData: [],
       graphData:[],
       anchorEl: null,
+      anchorEl2: null,
       elementsToGraph: [],
+      elementsToGraphSecondary: [],
+      secondary:true,
       keys:[],
+      numberkeys:[],
+      stringKeys:[],
       dataArr:[]
 
     }
@@ -36,10 +42,13 @@ class App extends Component {
     this.buttonTableHandler = this.buttonTableHandler.bind(this);
     this.buttonGraphHandler = this.buttonGraphHandler.bind(this);
     this.graphInput = this.graphInput.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.handleClickPrimary = this.handleClickPrimary.bind(this);
+    this.handleClickSecondary = this.handleClickSecondary.bind(this);
+    this.handleClosePrimary = this.handleClosePrimary.bind(this);
+    this.handleCloseSecondary = this.handleCloseSecondary.bind(this);
     this.handleCheckedBoxes = this.handleCheckedBoxes.bind(this);
     this.createDataObj = this.createDataObj.bind(this);
+    this.buttonVizHandler = this.buttonVizHandler.bind(this);
   }
 
   buttonTableHandler(){
@@ -48,24 +57,53 @@ class App extends Component {
   buttonGraphHandler(){
      !this.state.graphOpen ? this.setState({graphOpen:true}):this.setState({graphOpen:false})
   }
-  handleCheckedBoxes(checkedBoxes){
-    this.setState({elementsToGraph:checkedBoxes})
+
+  handleCheckedBoxes(checkedBox){
+    this.state.elementsToGraph.push(checkedBox)
       }
-  handleClick = event => {
-    !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
+
+
+  handleClickPrimary = event => {
     this.setState({
       anchorEl: event.currentTarget,
+      secondary:false,
+      elementsToGraph:[],
     });
   };
-  handleClose = () => {
-    !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
+  handleClickSecondary = event => {
+    this.setState({
+      anchorEl2: event.currentTarget,
+    });
+  };
+  handleClosePrimary = () => {
+    // !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
     // !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
     this.setState({
       anchorEl: null,
     });
 
+  }
+  handleCloseSecondary = () => {
+    // !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
+    // !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
+    if(this.state.tableIsOpened){
+      this.setState({tableIsOpened:false})
+    }
+    this.setState({
+      anchorEl2: null,
+      graphOpen:true,
+    });
     this.graphInput(this.state.dataArr,this.state.elementsToGraph)
   }
+
+  buttonVizHandler(){
+      !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
+      if(this.state.buttonVizContainer === 'none'){
+        this.setState({buttonVizContainer: 'block'})
+      } else {
+        this.setState({buttonVizContainer: 'none'})
+      }
+    }
 
   createDataObj(data){
      let count = 0;
@@ -74,34 +112,38 @@ class App extends Component {
      const dataArrConv = [];
      const dataArr = [];
      const keys = data.shift();
+     const numberKeys = [];
+     const stringKeys = [];
+
      data.map((row, index) =>{
         dataObj['id'] = index+1;
+        if(index === 0){
+          row.map((element,index)=>{
+            isNaN(Number(element)) ? stringKeys.push(keys[index]) : numberKeys.push(keys[index])
+          })
+          stringKeys.push('id');
+        }
         row.map((element,index)=>{
           isNaN(Number(element)) ? dataObj[keys[index]] = element:dataObj[keys[index]] = Number(element)
         })
         dataArr.push(dataObj)
         dataObj = {};
-
      })
-       this.setState({dataArr,keys})
+       this.setState({dataArr, keys, numberKeys, stringKeys})
      }
 
   graphInput(data,keys = []){
     let graphData = [keys];
     let graphRow = [];
-
-    console.log('data --- ', data)
     data.map((row) =>{
       for (let key of keys){
         graphRow.push(row[key]);
       }
-      console.log('graphRow',graphRow)
       graphData.push(graphRow)
       graphRow = [];
 
     })
     this.setState({graphData})
-
   }
 
   loadFile(data){
@@ -114,12 +156,18 @@ class App extends Component {
     };
 
   render() {
-    const { anchorEl } = this.state;
+    const { anchorEl,anchorEl2 } = this.state;
     const open = Boolean(anchorEl);
+    const open2 = Boolean(anchorEl2);
+
     let tableButtonTitle;
     let vizButtonTitle;
-    !this.state.tableIsOpened ? tableButtonTitle = 'Open table' : tableButtonTitle = 'Collapse table'
-    !this.state.vizIsOpened ? vizButtonTitle = 'Viz' : vizButtonTitle = 'Make a graph'
+    let graphButtonTitle;
+    let color;
+    !this.state.tableIsOpened ? tableButtonTitle = 'Expand table' : tableButtonTitle = 'Collapse table'
+    this.state.vizIsOpened ? vizButtonTitle = 'Vizualizer' : vizButtonTitle = 'Collapse Viz Menu'
+    this.state.vizIsOpened ? color = 'primary' : color = 'secondary'
+    !this.state.graphOpen ? graphButtonTitle = 'Expand graph' : graphButtonTitle = 'Collapse graph'
 
     return (
       <div className="App">
@@ -135,32 +183,63 @@ class App extends Component {
          <Button style={style.button} variant="contained" color="primary" onClick={this.buttonTableHandler}>
             {tableButtonTitle}
          </Button>
-         <Button style={style.button} variant="contained" color="primary" onClick={this.buttonGraphHandler}>
-            Graph Collapse
+
+         <Button style={style.button}  variant="contained" color="primary" onClick={this.buttonGraphHandler}>
+            {graphButtonTitle}
          </Button>
-         <Button style={style.button} variant="contained" color="primary" >
-            Filter the table
-         </Button>
-         <Button style={style.button} variant="contained" color="secondary"   onClick={this.handleClick}>
+
+
+         <Button style={style.button} variant="contained" color={color} onClick={this.buttonVizHandler}>
             {vizButtonTitle}
          </Button>
+       </div>
+
+       <div style = {{display: this.state.buttonVizContainer}} className = 'buttonVizContainer'>
+         <Button style={style.button} variant="contained"  color="primary" onClick={this.handleClickPrimary}>
+            Primary Axis
+         </Button>
+         <Button style={style.button} variant="contained" disabled = {this.state.secondary} color="primary" onClick={this.handleClickSecondary}>
+            Secondary Axis
+         </Button>
+         <div>{this.state.graphData[0]}</div>
+
        </div>
 
        <Popover
          id="simple-popper"
          open={open}
          anchorEl={anchorEl}
-         onClose={this.handleClose}
+         onClose={this.handleClosePrimary}
          anchorOrigin={{
-           vertical: 'bottom',
-           horizontal: 'center',
-         }}
-         transformOrigin={{
-           vertical: 'top',
-           horizontal: 'center',
-         }}>
-         <CheckboxList keys ={this.state.keys} handleCheckedBoxes = {this.handleCheckedBoxes} />
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}>
+         <CheckboxList keys ={this.state.stringKeys} handleCheckedBoxes = {this.handleCheckedBoxes} />
+
        </Popover>
+
+       <Popover
+         id="simple-popper"
+         open={open2}
+         anchorEl={anchorEl2}
+         onClose={this.handleCloseSecondary}
+         anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}>
+         <CheckboxList keys ={this.state.numberKeys} handleCheckedBoxes = {this.handleCheckedBoxes} />
+       </Popover>
+
+
+
 
        <Collapse isOpened={this.state.tableIsOpened}>
         <EnhancedTable data = {this.state.csvData} dataArr = {this.state.dataArr} keys = {this.state.keys}/>
@@ -169,12 +248,13 @@ class App extends Component {
        {/* */}
        <Collapse isOpened={this.state.graphOpen}>
          <Chart
-           chartType="ScatterChart"
+           chartType="AreaChart"
            data={this.state.graphData}
            width="100%"
            height="400px"
            legendToggle
          />
+
         </Collapse>
 
 
