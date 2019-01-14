@@ -6,9 +6,7 @@ import Button from '@material-ui/core/Button'
 import {Collapse} from 'react-collapse'
 import { Chart } from "react-google-charts";
 import CheckboxList from './Components/CheckBoxList'
-
 import Popover from '@material-ui/core/Popover'
-
 
 let style = {
   button:{
@@ -40,10 +38,8 @@ class App extends Component {
     this.graphInput = this.graphInput.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    // this.gatherKeys = this.gatherKeys.bind(this);
     this.handleCheckedBoxes = this.handleCheckedBoxes.bind(this);
     this.createDataObj = this.createDataObj.bind(this);
-    // this.analyzeData = this.analyzeData.bind(this);
   }
 
   buttonTableHandler(){
@@ -54,10 +50,9 @@ class App extends Component {
   }
   handleCheckedBoxes(checkedBoxes){
     this.setState({elementsToGraph:checkedBoxes})
-  }
+      }
   handleClick = event => {
     !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
-
     this.setState({
       anchorEl: event.currentTarget,
     });
@@ -68,6 +63,7 @@ class App extends Component {
     this.setState({
       anchorEl: null,
     });
+    console.log('these are all checked',this.state.elementsToGraph)
   }
 
   createDataObj(data){
@@ -77,79 +73,29 @@ class App extends Component {
      const dataArrConv = [];
      const dataArr = [];
      const keys = data.shift();
-     
-     data.map((row) =>{
+     data.map((row, index) =>{
+        dataObj['id'] = index+1;
         row.map((element,index)=>{
-          dataObj['id'] = index;
           isNaN(Number(element)) ? dataObj[keys[index]] = element:dataObj[keys[index]] = Number(element)
         })
-        dataArr.push(dataObj);
+        dataArr.push(dataObj)
+        dataObj = {};
+
      })
-
        this.setState({dataArr,keys})
-
      }
 
   graphInput(data,keys = []){
 
   }
 
-  // analyzeData(data,keys = []){
-  //   const newArray = [];
-  //   const convArr = [];
-  //   const numbersArray = [];
-  //   const stringsArray = [];
-  //   const dataTypes = [];
-  //   const dataTypesObj = {};
-  //   const strings = [];
-  //   const numbers = [];
-  //   let arr = [];
-  //   //Map over the original data array and convert the whole array to number
-  //
-  //   data.map((row) =>{
-  //      row.map((element,index)=>{
-  //        isNaN(Number(element)) ? arr.push(element):arr.push(Number(element))
-  //      })
-  //      convArr.push(arr);
-  //      arr = []
-  //   })
-  //
-  //   console.log('converted array', convArr)
-  //   //Populate numbers array with numbers filtered from the original array
-  //   newArray.map((row) =>{
-  //     numbersArray.push(row.filter(element => isNaN(element) === false));
-  //   })
-  //
-  //   newArray[0].map((element,index) =>{
-  //     isNaN(element) ? dataTypesObj[keys[index]] = 'string':dataTypesObj[keys[index]] = 'number'
-  //     isNaN(element) ? dataTypes.push('string'):dataTypes.push('number')
-  //     isNaN(element) ? strings.push(index):numbers.push(index)
-  //   })
-  //   data.map((row) =>{
-  //     row.map((element,index) =>{
-  //        if (strings.includes(index)){
-  //          arr.push(element);
-  //        }
-  //     })
-  //     stringsArray.push(arr);
-  //     arr = []
-  //   })
-  //
-  //   console.log('strings',stringsArray)
-  //   console.log('numbers',numbersArray)
-  //
-  //   return
-  // }
-
   loadFile(data){
     this.createDataObj(data)
     this.setState({
       csvData: data,
-      // graphData:graphData,
       tableIsOpened:true,
       buttonContainer:'block'
       })
-    // this.analyzeData(data, this.state.keys);
     };
 
   render() {

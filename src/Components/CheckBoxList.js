@@ -21,6 +21,7 @@ class CheckboxList extends React.Component {
   };
 
   handleToggle = value => () => {
+    console.log('in the toggle')
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -29,11 +30,11 @@ class CheckboxList extends React.Component {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
     this.setState({
       checked: newChecked,
     });
-    this.props.handleCheckedBoxes(this.state.checked)
+    this.props.handleCheckedBoxes(newChecked)
+    
   };
 
 
