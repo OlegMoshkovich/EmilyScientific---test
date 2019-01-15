@@ -3,7 +3,6 @@ import CSVReader from "react-csv-reader";
 // import EnhancedTable from './Components/SortableTable'
 import CheckboxList from './Components/CheckBoxList'
 import Popover from '@material-ui/core/Popover'
-// import SelectedListItem from './Components/SelectedList'
 import './App.css';
 import Button from '@material-ui/core/Button'
 import {Collapse} from 'react-collapse'
@@ -43,6 +42,7 @@ class App extends Component {
       stringKeys:[],
       dataArr:[],
       statisticsDataArr:[],
+      stats:[],
       modifiedKeys:[],
       modifiedData:[],
 
@@ -50,10 +50,8 @@ class App extends Component {
     this.loadFile = this.loadFile.bind(this);
     this.buttonTableHandler = this.buttonTableHandler.bind(this);
     this.buttonStatisticsHandler = this.buttonStatisticsHandler.bind(this);
-
     this.graphInput = this.graphInput.bind(this);
     this.statisticsInput = this.statisticsInput.bind(this);
-
     this.handleClickPrimary = this.handleClickPrimary.bind(this);
     this.handleClickSecondary = this.handleClickSecondary.bind(this);
     this.handleClosePrimary = this.handleClosePrimary.bind(this);
@@ -114,13 +112,6 @@ class App extends Component {
             isNaN(Number(element)) ? dataObj[keys[index]] = element:dataObj[keys[index]] = Number(element)
             return dataObj
           })
-          // console.log('dataObj---',dataObj)
-          //
-          // for (let element in dataObj){
-          //   sumObj[element] = dataObj[element];
-          //   console.log('element ----', dataObj[element])
-          //   console.log('sumobject ----' ,sumObj)
-          // }
 
           dataArr.push(dataObj)
           dataObj = {};
@@ -176,7 +167,6 @@ class App extends Component {
       //calculate  max, min, range, totals
       for (let el in sumObj){
         //check if the value is a stringKeys
-        console.log("string",sumObj[el][0]);
         if (typeof(sumObj[el][0]) === 'string'){
           totals[el] = 'N/A'
           min[el] = 'N/A'
@@ -198,7 +188,7 @@ class App extends Component {
         average[el] = "N/A" :
         average[el] = Math.ceil(totals[el]/length)
       }
-      
+
       average['id']='N/A'
       totals['id']='N/A'
       max['id']='N/A'
@@ -206,7 +196,8 @@ class App extends Component {
       range['id'] = 'N/A'
       stats = {'total':totals,'average':average,'min':min,'max':max,'range':range};
 
-      console.log('statistics',stats)
+      // console.log('statistics',stats)
+      this.setState({stats:stats})
       return stats
 
 
@@ -293,7 +284,7 @@ class App extends Component {
        rowHover:false,
        viewColumns:true,
 
-       onCellClick:function(colData: any, cellMeta: { colIndex: number, rowIndex: number }){console.log('column Index',cellMeta.colIndex)}
+       // onCellClick:function(colData: any, cellMeta: { colIndex: number, rowIndex: number }){console.log('column Index',cellMeta.colIndex)}
     };
 
     // Button tittles
@@ -354,7 +345,7 @@ class App extends Component {
          <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>
          </div>
          <div style={{margin:'40px'}}>
-         <SimpleTable data = {this.state.dataArr}/>
+         <SimpleTable data = {this.state.stats} keys = {this.state.keys}/>
          </div>
        </div>
 
