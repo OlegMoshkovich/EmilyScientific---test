@@ -31,6 +31,7 @@ class App extends Component {
       buttonContainer:'none',
       buttonVizContainer:'none',
       statisticsContainer:'none',
+      graphButtonState:true,
       csvData: [],
       graphData:[],
       anchorEl: null,
@@ -46,7 +47,6 @@ class App extends Component {
       stats:[],
       modifiedKeys:[],
       modifiedData:[],
-
     }
     this.loadFile = this.loadFile.bind(this);
     this.buttonTableHandler = this.buttonTableHandler.bind(this);
@@ -67,6 +67,16 @@ class App extends Component {
   loadFile(data){
     //after the createdDataObj is called the original data received from csv is separated into the header - keys and the body
     //which is the rest of the rows
+    this.setState({
+        tableIsOpened:false,
+        vizIsOpened: false,
+        graphOpen:false,
+        statisticsOpen:false,
+        buttonContainer:'none',
+        buttonVizContainer:'none',
+        statisticsContainer:'none',
+        graphButtonState:true})
+
     this.createDataObj(data);
     this.statisticsInput(this.state.dataArr, this.state.keys);
     //modified Data is created to be fed into the MUI table - it accepts array of arrays
@@ -86,7 +96,6 @@ class App extends Component {
 
   //organizes csv data - array of arrays in to the array of object - as well as separates number from string
   createDataObj(data){
-
        let dataObj = {};
        const dataArr = [];
        const keys = data.shift();
@@ -121,7 +130,7 @@ class App extends Component {
        this.setState({dataArr, keys, numberKeys, stringKeys})
        return dataArr
 
-       }
+     }
 
   //the graphing library requires array of arrays -- prepares the data for vizualization
   graphInput(data,keys = []){
@@ -267,6 +276,7 @@ class App extends Component {
       secondary:true
     });
     this.graphInput(this.state.dataArr,this.state.elementsToGraph)
+    this.setState({graphButtonState: false})
   }
 
   render() {
@@ -316,7 +326,7 @@ class App extends Component {
          <Button style={style.button} variant="contained" color="primary" onClick={this.buttonTableHandler}>
             {tableButtonTitle}
          </Button>
-         <Button style={style.button}  variant="contained" color="primary" onClick={this.buttonGraphHandler}>
+         <Button style={style.button}  variant="contained" disabled={this.state.graphButtonState} color="primary" onClick={this.buttonGraphHandler}>
             {graphButtonTitle}
          </Button>
          <Button style={style.button} variant="contained" color={vizColor} onClick={this.buttonVizHandler}>
@@ -421,6 +431,7 @@ class App extends Component {
            <Chart
              chartType="Scatter"
              data={this.state.graphData}
+             loader={<div>Loading Chart</div>}
              width="100%"
              height="400px"
              legendToggle/>
