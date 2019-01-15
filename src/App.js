@@ -58,7 +58,7 @@ class App extends Component {
     this.handleCloseSecondary = this.handleCloseSecondary.bind(this);
     this.handleCheckedBoxes = this.handleCheckedBoxes.bind(this);
     this.createDataObj = this.createDataObj.bind(this);
-    this.buttonVizHandler = this.buttonVizHandler.bind(this);
+    this.buttonGraphHandler = this.buttonGraphHandler.bind(this);
     this.buttonVizHandler = this.buttonVizHandler.bind(this);
   }
 
@@ -194,7 +194,7 @@ class App extends Component {
       max['id']='N/A'
       min['id']='N/A'
       range['id'] = 'N/A'
-      stats = {'total':totals,'average':average,'min':min,'max':max,'range':range};
+      stats = {'min':min,'max':max,'range':range,'average':average,'total':totals};
 
       // console.log('statistics',stats)
       this.setState({stats:stats})
@@ -208,7 +208,8 @@ class App extends Component {
      !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
   }
   buttonGraphHandler(){
-     !this.state.graphOpen ? this.setState({graphOpen:true}):this.setState({graphOpen:false})
+     // console.log('graph open', this.state.graphOpen)
+     this.state.graphOpen ? this.setState({graphOpen:false}):this.setState({graphOpen:true})
   }
   buttonStatisticsHandler(){
      this.state.statisticsOpen ? this.setState({statisticsOpen:false}):this.setState({statisticsOpen:true})
@@ -295,7 +296,7 @@ class App extends Component {
 
     //Switches for the buton titles + properties
     this.state.tableIsOpened ? tableButtonTitle = 'Collapse table' : tableButtonTitle = 'Expand table'
-    this.state.vizIsOpened ? vizButtonTitle = 'Vizualizer' : vizButtonTitle = 'Collapse Viz Menu'
+    this.state.vizIsOpened ? vizButtonTitle = 'Collapse Viz Menu' : vizButtonTitle = 'Vizualizer'
     this.state.vizIsOpened ? vizColor = 'secondary' : vizColor = 'primary'
     this.state.graphOpen ? graphButtonTitle = 'Collapse graph' : graphButtonTitle = 'Expand graph'
     this.state.statisticsOpen ? statColor = 'secondary' : statColor = 'primary'
@@ -337,7 +338,7 @@ class App extends Component {
          <Button style={style.button} variant="contained" disabled = {this.state.secondary} color="primary" onClick={this.handleClickSecondary}>
             Secondary Axis
          </Button>
-         <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>PLEASE SELECT A SINGLE PRIMARY VALUE AND MULTIPLE SECONDARY VALUES - IF YOU WISH.</div>
+         <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>PLEASE SELECT A <span style={{color:'red'}}>SINGLE PRIMARY VALUE </span>AND MULTIPLE SECONDARY VALUES - IF YOU WISH.</div>
        </div>
 
        {/* Statistics container - activated by the Statistics button*/}
