@@ -9,6 +9,8 @@ import Button from '@material-ui/core/Button'
 import {Collapse} from 'react-collapse'
 import { Chart } from "react-google-charts";
 import MUIDataTable from "mui-datatables";
+import SimpleTable from './Components/SimpleTable'
+import * as math from 'mathjs'
 
 let style = {
   button:{
@@ -40,13 +42,18 @@ class App extends Component {
       numberkeys:[],
       stringKeys:[],
       dataArr:[],
+      statisticsDataArr:[],
       modifiedKeys:[],
-      modifiedData:[]
+      modifiedData:[],
+
     }
     this.loadFile = this.loadFile.bind(this);
     this.buttonTableHandler = this.buttonTableHandler.bind(this);
-    this.buttonGraphHandler = this.buttonGraphHandler.bind(this);
+    this.buttonStatisticsHandler = this.buttonStatisticsHandler.bind(this);
+
     this.graphInput = this.graphInput.bind(this);
+    this.statisticsInput = this.statisticsInput.bind(this);
+
     this.handleClickPrimary = this.handleClickPrimary.bind(this);
     this.handleClickSecondary = this.handleClickSecondary.bind(this);
     this.handleClosePrimary = this.handleClosePrimary.bind(this);
@@ -54,13 +61,15 @@ class App extends Component {
     this.handleCheckedBoxes = this.handleCheckedBoxes.bind(this);
     this.createDataObj = this.createDataObj.bind(this);
     this.buttonVizHandler = this.buttonVizHandler.bind(this);
+    this.buttonVizHandler = this.buttonVizHandler.bind(this);
   }
 
   //first callback that is called when csv file is loaded
   loadFile(data){
     //after the createdDataObj is called the original data received from csv is separated into the header - keys and the body
     //which is the rest of the rows
-    this.createDataObj(data)
+    this.createDataObj(data);
+    this.statisticsInput(this.state.dataArr, this.state.keys);
     //modified Data is created to be fed into the MUI table - it accepts array of arrays
     const modifiedData = data;
     //loop over the body portion and include index
@@ -75,16 +84,16 @@ class App extends Component {
       modifiedData:modifiedData
       })
     };
-  // organizes csv data - array of arrays in to the array of object - as well as separates number from string
+
+  //organizes csv data - array of arrays in to the array of object - as well as separates number from string
   createDataObj(data){
 
        let dataObj = {};
-
-
        const dataArr = [];
        const keys = data.shift();
        const numberKeys = [];
        const stringKeys = [];
+       const sumObj = {}
 
        //include 'id' into the keys array extracted from the original data array
        this.setState({modifiedKeys:['id', ...keys]})
@@ -96,7 +105,6 @@ class App extends Component {
           if(index === 0){
             row.map((element,index)=>{
               isNaN(Number(element)) ? stringKeys.push(keys[index]) : numberKeys.push(keys[index])
-
               return stringKeys
             })
             stringKeys.push('id');
@@ -106,14 +114,24 @@ class App extends Component {
             isNaN(Number(element)) ? dataObj[keys[index]] = element:dataObj[keys[index]] = Number(element)
             return dataObj
           })
+          // console.log('dataObj---',dataObj)
+          //
+          // for (let element in dataObj){
+          //   sumObj[element] = dataObj[element];
+          //   console.log('element ----', dataObj[element])
+          //   console.log('sumobject ----' ,sumObj)
+          // }
+
           dataArr.push(dataObj)
           dataObj = {};
           return dataArr
        })
-         this.setState({dataArr, keys, numberKeys, stringKeys})
-         return data
+       this.setState({dataArr, keys, numberKeys, stringKeys})
+       return dataArr
+
        }
-  // the graphing library requires array of arrays -- prepares the data for vizualization
+
+  //the graphing library requires array of arrays -- prepares the data for vizualization
   graphInput(data,keys = []){
      let graphData = [keys];
      let graphRow = [];
@@ -128,7 +146,58 @@ class App extends Component {
      this.setState({graphData})
    }
 
-  // Handlers for the buttons responsible for the button behavior - expand/collapse
+  //Statistics Methods - processes data to be fed to the simple statistics table
+  statisticsInput(data,keys =[]){
+      const totals = {};
+      const average = {};
+      const min  = {};
+      const max = {};
+      const range = {}
+      let length;
+
+      const sumObj = {};
+      //create a summary object with all of the data proprties
+      sumObj['id']=[]
+      //populate the sumObj with keys and set it equal to the empty array
+      for (let key of keys){
+        sumObj[key] = []
+      }
+      //Populate summary object by collecting all of the row values for the same key in the array
+      data.map((row,index) =>{
+          for (let el in row){
+            sumObj[el].push(row[el])
+          }
+          length = index;
+      })
+      //calculate average
+      for (let el in totals){
+        average[el] = Math.ceil(totals[el]/length)
+      }
+      //calculate  max, min
+      for (let el in sumObj){
+        //check if the value is a stringKeys
+        if (sumObj[el][0] === 'string'){
+          totals[el] = 'N/A'
+        }else{
+
+          min[el] = Math.min(...sumObj[el]);
+          max[el] = Math.max(...sumObj[el]);
+          range[el] = max[el] - min[el];
+          totals[el] = sumObj[el].reduce((prev,cur)=>{
+            return cur + prev
+          },0)
+        }
+
+      }
+      totals['id']='N/A'
+      // console.log('average',average)
+      // console.log('min',min)
+      // console.log('max',max)
+      // console.log('range',range)
+
+  }
+
+  //Handlers for the buttons responsible for the button behavior - expand/collapse
   buttonTableHandler(){
      !this.state.tableIsOpened ? this.setState({tableIsOpened:true}):this.setState({tableIsOpened:false})
   }
@@ -137,6 +206,11 @@ class App extends Component {
   }
   buttonStatisticsHandler(){
      this.state.statisticsOpen ? this.setState({statisticsOpen:true}):this.setState({statisticsOpen:false})
+     if(this.state.statisticsContainer === 'none'){
+       this.setState({statisticsContainer: 'block'})
+     } else {
+       this.setState({statisticsContainer: 'none'})
+     }
   }
   buttonVizHandler(){
       !this.state.vizIsOpened ? this.setState({vizIsOpened :true}):this.setState({vizIsOpened:false})
@@ -172,6 +246,8 @@ class App extends Component {
     });
 
   }
+
+  //Second Axis handler -- calls graph input inside
   handleCloseSecondary = () => {
 
     if(this.state.tableIsOpened){
@@ -190,6 +266,7 @@ class App extends Component {
     const { anchorEl,anchorEl2 } = this.state;
     const open = Boolean(anchorEl);
     const open2 = Boolean(anchorEl2);
+
     //table options --
     const options = {
        filterType: "dropdown",
@@ -200,8 +277,11 @@ class App extends Component {
        resizableColumns:false,
        rowHover:false,
        viewColumns:true,
+
        onCellClick:function(colData: any, cellMeta: { colIndex: number, rowIndex: number }){console.log('column Index',cellMeta.colIndex)}
     };
+
+    // Button tittles
     let tableButtonTitle;
     let vizButtonTitle;
     let graphButtonTitle;
@@ -215,7 +295,6 @@ class App extends Component {
 
     return (
       <div className="App">
-
        <div className="container">
          <CSVReader
            cssClass="react-csv-input"
@@ -224,6 +303,7 @@ class App extends Component {
            onFileLoaded={this.loadFile}/>
        </div>
 
+       {/* First Level Buttons*/}
        <div style = {{display: this.state.buttonContainer}} className = 'buttonContainer'>
          <Button style={style.button} variant="contained" color="primary" onClick={this.buttonTableHandler}>
             {tableButtonTitle}
@@ -234,11 +314,12 @@ class App extends Component {
          <Button style={style.button} variant="contained" color={color} onClick={this.buttonVizHandler}>
             {vizButtonTitle}
          </Button>
-         <Button style={style.button} variant="contained" color={color} disabled = {true} onClick={this.buttonStatisticsHandler}>
+         <Button style={style.button} variant="contained" color={color} disabled = {false} onClick={this.buttonStatisticsHandler}>
             Statistics
          </Button>
        </div>
 
+       {/* Vizualizer Control Buttons*/}
        <div style = {{display: this.state.buttonVizContainer}} className = 'buttonVizContainer'>
          <Button style={style.button} variant="contained" disabled = {true} color="primary" onClick={this.handleClickPrimary}>
           Graph Type
@@ -252,8 +333,15 @@ class App extends Component {
          <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>PLEASE SELECT A SINGLE PRIMARY VALUE AND MULTIPLE SECONDARY VALUES - IF YOU WISH.</div>
        </div>
 
+       {/* Statistics container - activated by the Statistics button*/}
        <div style = {{display: this.state.statisticsContainer}} className = 'statisticsContainer'>
-         <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>statistics</div>
+
+         <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>
+         </div>
+         <div style={{margin:'40px'}}>
+         <SimpleTable/>
+         </div>
+
        </div>
 
        {/* Primary menu for defining the graph*/}
@@ -300,7 +388,7 @@ class App extends Component {
          </div>
        */}
 
-       {/* MUI data table that is a "turn key - a bit of a black box component that includes most of the requested functionality" */}
+       {/* MUI data table that is a "turn key" - a bit of a black box component that includes most of the requested functionality" */}
         <div style={{margin:'40px'}}>
           <MUIDataTable
             title={""}

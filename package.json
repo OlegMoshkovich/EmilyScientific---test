@@ -6,6 +6,7 @@
     "@material-ui/core": "^3.8.3",
     "@material-ui/icons": "^3.0.2",
     "d3": "^5.7.0",
+    "mathjs": "^5.4.1",
     "mui-datatables": "^2.0.0-beta-50",
     "react": "^16.7.0",
     "react-collapse": "^4.0.3",
