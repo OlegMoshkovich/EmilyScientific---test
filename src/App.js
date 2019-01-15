@@ -96,6 +96,7 @@ class App extends Component {
 
   //organizes csv data - array of arrays in to the array of object - as well as separates number from string
   createDataObj(data){
+
        let dataObj = {};
        const dataArr = [];
        const keys = data.shift();
@@ -312,7 +313,13 @@ class App extends Component {
     this.state.statisticsOpen ? statColor = 'secondary' : statColor = 'primary'
 
     return (
+
       <div className="App">
+      
+      <div className="title-box">
+        <div className ="project_title">Prepared for Genesis by Oleg Moshkovich.</div>
+       </div>
+
        <div className="container" style={{paddingTop:'40px'}}>
          <CSVReader
            cssClass="react-csv-input"

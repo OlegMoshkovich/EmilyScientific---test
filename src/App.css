@@ -51,3 +51,19 @@ label{
   padding-right:10rem;
   left:60px;
 }
+
+.project_title {
+  display:inline;
+  padding-left:1rem;
+  padding-right:1rem;
+  text-decoration: none;
+  font-weight: 300;
+  font-size: 15px;
+}
+.title-box{
+  position:absolute ;
+  display: inline-block;
+  top:30px;
+  padding-right:10rem;
+  left:30px;
+}
