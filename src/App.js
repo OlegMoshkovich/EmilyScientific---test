@@ -24,7 +24,7 @@ class App extends Component {
     super(props);
     this.state = {
       tableIsOpened:false,
-      vizIsOpened: true,
+      vizIsOpened: false,
       graphOpen:false,
       statisticsOpen:false,
       buttonContainer:'none',
@@ -211,7 +211,7 @@ class App extends Component {
      !this.state.graphOpen ? this.setState({graphOpen:true}):this.setState({graphOpen:false})
   }
   buttonStatisticsHandler(){
-     this.state.statisticsOpen ? this.setState({statisticsOpen:true}):this.setState({statisticsOpen:false})
+     this.state.statisticsOpen ? this.setState({statisticsOpen:false}):this.setState({statisticsOpen:true})
      if(this.state.statisticsContainer === 'none'){
        this.setState({statisticsContainer: 'block'})
      } else {
@@ -284,20 +284,21 @@ class App extends Component {
        rowHover:false,
        viewColumns:true,
 
-       // onCellClick:function(colData: any, cellMeta: { colIndex: number, rowIndex: number }){console.log('column Index',cellMeta.colIndex)}
     };
 
     // Button tittles
     let tableButtonTitle;
     let vizButtonTitle;
     let graphButtonTitle;
-    let color;
+    let vizColor;
+    let statColor;
 
     //Switches for the buton titles + properties
     this.state.tableIsOpened ? tableButtonTitle = 'Collapse table' : tableButtonTitle = 'Expand table'
     this.state.vizIsOpened ? vizButtonTitle = 'Vizualizer' : vizButtonTitle = 'Collapse Viz Menu'
-    this.state.vizIsOpened ? color = 'primary' : color = 'secondary'
+    this.state.vizIsOpened ? vizColor = 'secondary' : vizColor = 'primary'
     this.state.graphOpen ? graphButtonTitle = 'Collapse graph' : graphButtonTitle = 'Expand graph'
+    this.state.statisticsOpen ? statColor = 'secondary' : statColor = 'primary'
 
     return (
       <div className="App">
@@ -317,10 +318,10 @@ class App extends Component {
          <Button style={style.button}  variant="contained" color="primary" onClick={this.buttonGraphHandler}>
             {graphButtonTitle}
          </Button>
-         <Button style={style.button} variant="contained" color={color} onClick={this.buttonVizHandler}>
+         <Button style={style.button} variant="contained" color={vizColor} onClick={this.buttonVizHandler}>
             {vizButtonTitle}
          </Button>
-         <Button style={style.button} variant="contained" color={color} disabled = {false} onClick={this.buttonStatisticsHandler}>
+         <Button style={style.button} variant="contained" color={statColor} disabled = {false} onClick={this.buttonStatisticsHandler}>
             Statistics
          </Button>
        </div>

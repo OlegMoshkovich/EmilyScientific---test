@@ -213,7 +213,7 @@ class EnhancedTable extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    
+
     if (this.props.data !== prevProps.data) {
       this.setState({ data: this.props.dataArr})
     }
