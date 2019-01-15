@@ -33,8 +33,11 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
+
+
 function SimpleTable(props) {
   const { classes } = props;
+  console.log('component properties',props.data)
 
   return (
     <Paper className={classes.root}>
@@ -68,7 +71,7 @@ function SimpleTable(props) {
           })}
         </TableBody>
 
-        
+
       </Table>
     </Paper>
   );

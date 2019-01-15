@@ -152,10 +152,12 @@ class App extends Component {
       const average = {};
       const min  = {};
       const max = {};
-      const range = {}
+      const range = {};
+      let stats = {};
       let length;
 
       const sumObj = {};
+
       //create a summary object with all of the data proprties
       sumObj['id']=[]
       //populate the sumObj with keys and set it equal to the empty array
@@ -170,16 +172,18 @@ class App extends Component {
           length = index;
       })
       //calculate average
-      for (let el in totals){
-        average[el] = Math.ceil(totals[el]/length)
-      }
-      //calculate  max, min
+
+      //calculate  max, min, range, totals
       for (let el in sumObj){
         //check if the value is a stringKeys
-        if (sumObj[el][0] === 'string'){
+        console.log("string",sumObj[el][0]);
+        if (typeof(sumObj[el][0]) === 'string'){
           totals[el] = 'N/A'
-        }else{
+          min[el] = 'N/A'
+          max[el] = 'N/A'
+          range[el] = 'N/A'
 
+        }else{
           min[el] = Math.min(...sumObj[el]);
           max[el] = Math.max(...sumObj[el]);
           range[el] = max[el] - min[el];
@@ -187,13 +191,24 @@ class App extends Component {
             return cur + prev
           },0)
         }
-
       }
+
+      for (let el in totals){
+        typeof(totals[el]) === "string" ?
+        average[el] = "N/A" :
+        average[el] = Math.ceil(totals[el]/length)
+      }
+      
+      average['id']='N/A'
       totals['id']='N/A'
-      // console.log('average',average)
-      // console.log('min',min)
-      // console.log('max',max)
-      // console.log('range',range)
+      max['id']='N/A'
+      min['id']='N/A'
+      range['id'] = 'N/A'
+      stats = {'total':totals,'average':average,'min':min,'max':max,'range':range};
+
+      console.log('statistics',stats)
+      return stats
+
 
   }
 
@@ -339,9 +354,8 @@ class App extends Component {
          <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>
          </div>
          <div style={{margin:'40px'}}>
-         <SimpleTable/>
+         <SimpleTable data = {this.state.dataArr}/>
          </div>
-
        </div>
 
        {/* Primary menu for defining the graph*/}
