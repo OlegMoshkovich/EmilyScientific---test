@@ -8,24 +8,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-
-.project_title {
-  display:inline;
-  padding-left:1rem;
-  padding-right:1rem;
-  text-decoration: none;
-  font-weight: 300;
-  font-size: 15px;
-}
-.title-box{
-  position:relative ;
-  display: inline-block;
-  top:30px;
-  padding-right:10rem;
-  left:60px;
 }

@@ -21,52 +21,36 @@ const styles = theme => ({
 
 
 
-
-
-
-
 function SimpleTable(props) {
   const { classes } = props;
   const tableBody = []
+  let uniqueKey = 0;
 
   for (let el in props.data){
-
     let statName = el;
     let row = {'Type':statName,...props.data[el]}
-
     tableBody.push(row)
   }
-
-  console.log('finished data',tableBody)
   const tableKeys = ['Type','id',...props.keys]
-
-
 
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
-
-
         <TableHead>
           <TableRow>
-
            {tableKeys.map(key =>{
-             return <TableCell align ="center">{key}</TableCell>
+             uniqueKey++;
+             return <TableCell key = {uniqueKey} align ="center">{key}</TableCell>
            })}
-
-
           </TableRow>
         </TableHead>
-
-
         <TableBody>
         {tableBody.map(row => {
          return (
-           <TableRow key={row.id}>
+           <TableRow key={uniqueKey}>
            {Object.keys(row).map((cell)=> {
-             //address this later Unique Key
-             // uniqueKey++;
-             return <TableCell  align="center">{row[cell]}</TableCell>
+             uniqueKey++;
+             return <TableCell  key = {uniqueKey} align="center">{row[cell]}</TableCell>
            })
          }
            </TableRow>

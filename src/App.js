@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CSVReader from "react-csv-reader";
-// import EnhancedTable from './Components/SortableTable'
+import EnhancedTable from './Components/SortableTable'
 import CheckboxList from './Components/CheckBoxList'
 import Popover from '@material-ui/core/Popover'
 import './App.css';
@@ -8,8 +8,9 @@ import Button from '@material-ui/core/Button'
 import {Collapse} from 'react-collapse'
 import { Chart } from "react-google-charts";
 import MUIDataTable from "mui-datatables";
-import SimpleTable from './Components/SimpleTable'
-import * as math from 'mathjs'
+import SimpleTable from './Components/SimpleTable';
+
+
 
 let style = {
   button:{
@@ -91,7 +92,7 @@ class App extends Component {
        const keys = data.shift();
        const numberKeys = [];
        const stringKeys = [];
-       const sumObj = {}
+
 
        //include 'id' into the keys array extracted from the original data array
        this.setState({modifiedKeys:['id', ...keys]})
@@ -146,7 +147,6 @@ class App extends Component {
       const range = {};
       let stats = {};
       let length;
-
       const sumObj = {};
 
       //create a summary object with all of the data proprties
@@ -161,6 +161,7 @@ class App extends Component {
             sumObj[el].push(row[el])
           }
           length = index;
+          return sumObj
       })
       //calculate average
 
@@ -284,7 +285,6 @@ class App extends Component {
        resizableColumns:false,
        rowHover:false,
        viewColumns:true,
-
     };
 
     // Button tittles
@@ -303,7 +303,7 @@ class App extends Component {
 
     return (
       <div className="App">
-       <div className="container">
+       <div className="container" style={{paddingTop:'40px'}}>
          <CSVReader
            cssClass="react-csv-input"
            label = "PLEASE UPLOAD CSV FILE"
@@ -390,20 +390,28 @@ class App extends Component {
 
 
        {/* Material enhanced table originally constructed to display data - includes sorting - later replaced by the MUI table*/}
+       <div style={{margin:'40px'}}>
+         <EnhancedTable data = {this.state.csvData} dataArr = {this.state.dataArr} keys = {this.state.keys}/>
+       </div>
+
+       {/* MUI data table  --- Includes Search and Filter and search ----  */}
+       {/* --------------------------------------------------------------------------------------- */}
+       {/* please uncomment to check*/}
+       {/* During testing it was uncovered that this version of the table sometimes throws ERRORS therefore it was decided to*/}
+       {/* to keep working on it and to submit -- publish --  the stable version that does not include filter*/}
+
        {/*
          <div style={{margin:'40px'}}>
-           <EnhancedTable data = {this.state.csvData} dataArr = {this.state.dataArr} keys = {this.state.keys}/>
+           <MUIDataTable
+             title={""}
+             options ={options}
+             data={this.state.modifiedData}
+             columns={this.state.modifiedKeys}
+           />
          </div>
-       */}
+         */}
 
-       {/* MUI data table that is a "turn key" - a bit of a black box component that includes most of the requested functionality" */}
-        <div style={{margin:'40px'}}>
-          <MUIDataTable
-            title={""}
-            data={this.state.modifiedData}
-            columns={this.state.modifiedKeys}
-          />
-        </div>
+
        </Collapse>
 
 
