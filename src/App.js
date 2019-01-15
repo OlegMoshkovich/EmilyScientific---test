@@ -329,6 +329,8 @@ class App extends Component {
 
        {/* Vizualizer Control Buttons*/}
        <div style = {{display: this.state.buttonVizContainer}} className = 'buttonVizContainer'>
+       <div style={{marginTop:'20px', marginBottom:'20px',fontSize:'10px',fontFamily:'Roboto'}}>PLEASE SELECT A <span style={{color:'red'}}>SINGLE PRIMARY VALUE </span>AND - IF YOU WISH - <span style={{color:'red'}}>MULTIPLE SECONDARY VALUES</span>.</div>
+
          <Button style={style.button} variant="contained" disabled = {true} color="primary" onClick={this.handleClickPrimary}>
           Graph Type
          </Button>
@@ -338,7 +340,6 @@ class App extends Component {
          <Button style={style.button} variant="contained" disabled = {this.state.secondary} color="primary" onClick={this.handleClickSecondary}>
             Secondary Axis
          </Button>
-         <div style={{marginTop:'20px', marginBottom:'40px',fontSize:'10px',fontFamily:'Roboto'}}>PLEASE SELECT A <span style={{color:'red'}}>SINGLE PRIMARY VALUE </span>AND MULTIPLE SECONDARY VALUES - IF YOU WISH.</div>
        </div>
 
        {/* Statistics container - activated by the Statistics button*/}
@@ -401,7 +402,6 @@ class App extends Component {
             title={""}
             data={this.state.modifiedData}
             columns={this.state.modifiedKeys}
-            options={options}
           />
         </div>
        </Collapse>
