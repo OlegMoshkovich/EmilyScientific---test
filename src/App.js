@@ -68,14 +68,29 @@ class App extends Component {
     //after the createdDataObj is called the original data received from csv is separated into the header - keys and the body
     //which is the rest of the rows
     this.setState({
-        tableIsOpened:false,
-        vizIsOpened: false,
-        graphOpen:false,
-        statisticsOpen:false,
-        buttonContainer:'none',
-        buttonVizContainer:'none',
-        statisticsContainer:'none',
-        graphButtonState:true})
+      tableIsOpened:false,
+      vizIsOpened: false,
+      graphOpen:false,
+      statisticsOpen:false,
+      buttonContainer:'none',
+      buttonVizContainer:'none',
+      statisticsContainer:'none',
+      graphButtonState:true,
+      csvData: [],
+      graphData:[],
+      anchorEl: null,
+      anchorEl2: null,
+      elementsToGraph: [],
+      elementsToGraphSecondary: [],
+      secondary:true,
+      keys:[],
+      numberkeys:[],
+      stringKeys:[],
+      dataArr:[],
+      statisticsDataArr:[],
+      stats:[],
+      modifiedKeys:[],
+      modifiedData:[],})
 
     this.createDataObj(data);
     this.statisticsInput(this.state.dataArr, this.state.keys);
@@ -315,7 +330,7 @@ class App extends Component {
     return (
 
       <div className="App">
-      
+
       <div className="title-box">
         <div className ="project_title">Prepared for Genesis by Oleg Moshkovich.</div>
        </div>

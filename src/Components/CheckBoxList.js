@@ -21,7 +21,7 @@ class CheckboxList extends React.Component {
   };
 
   handleToggle = value => () => {
-    console.log('in the toggle')
+
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -33,8 +33,7 @@ class CheckboxList extends React.Component {
     this.setState({
       checked: newChecked,
     });
-    console.log('in the list componet -- checks',newChecked)
-    console.log('in the list componet -- checks -- CurrentIndex',value.toString())
+    
     //this sends back to the app component the clicked which values were checked for graphing
     return this.props.handleCheckedBoxes(value.toString())
 
