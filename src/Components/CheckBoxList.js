@@ -33,7 +33,7 @@ class CheckboxList extends React.Component {
     this.setState({
       checked: newChecked,
     });
-    
+
     //this sends back to the app component the clicked which values were checked for graphing
     return this.props.handleCheckedBoxes(value.toString())
 
