@@ -31,7 +31,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-         <Button style={style.button} variant="contained" color="primary" onClick={this.props.onCounterIncrement}>Count</Button>
+         <Button style={style.button} variant="contained" color="primary" onClick={this.props.onCounterIncrement}>Add</Button>
+         <Button style={style.button} variant="contained" color="primary" onClick={this.props.onCounterDecrease}>Subtract</Button>
          <div>{this.props.cnt}</div>
       </div>
     );
@@ -40,11 +41,12 @@ class App extends Component {
 
 const mapDispatchToProps = dispatch =>{
   return {
-    onCounterIncrement: () => {
-      console.log('action is called')
-      dispatch({type:'INCREMENT'})}
+    onCounterIncrement: () => { dispatch({type:'INCREMENT'})},
+    onCounterDecrease: () => { dispatch({type:'DECREASE'})}
+    }
   }
-}
+
+
 
 const mapStateToProps = state => {
   return {
