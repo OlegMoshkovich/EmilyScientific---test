@@ -32,10 +32,16 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-         <Button style={style.button} variant="contained" color="primary" onClick={this.buttonHandler}>Count</Button>
+         <Button style={style.button} variant="contained" color="primary" onClick={this.onCounterIncrement}>Count</Button>
          <div>{this.props.cnt}</div>
       </div>
     );
+  }
+}
+
+const mapDispatchToProps = dispath =>{
+  return {
+    onCounterIncrement: () => dispath({type:'INCREMENT'})
   }
 }
 
@@ -45,4 +51,4 @@ const mapStateToProps = state => {
   };
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
