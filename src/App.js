@@ -20,7 +20,6 @@ class App extends Component {
     this.state = {
     count:0
     }
-
   }
 
   buttonHandler= () =>{
@@ -32,16 +31,18 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-         <Button style={style.button} variant="contained" color="primary" onClick={this.onCounterIncrement}>Count</Button>
+         <Button style={style.button} variant="contained" color="primary" onClick={this.props.onCounterIncrement}>Count</Button>
          <div>{this.props.cnt}</div>
       </div>
     );
   }
 }
 
-const mapDispatchToProps = dispath =>{
+const mapDispatchToProps = dispatch =>{
   return {
-    onCounterIncrement: () => dispath({type:'INCREMENT'})
+    onCounterIncrement: () => {
+      console.log('action is called')
+      dispatch({type:'INCREMENT'})}
   }
 }
 
