@@ -85,7 +85,7 @@ class TextFields extends React.Component {
   render() {
     const { classes } = this.props;
     if (this.state.redirect === true) {
-      return <Redirect to='/advil' />
+      return <Redirect to='/' />
     }
     return (
       <form className={classes.container} noValidate autoComplete="off">

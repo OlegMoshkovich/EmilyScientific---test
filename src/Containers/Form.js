@@ -25,7 +25,7 @@ const collection = [
     }
   },
   {
-    question:'how do your year?',
+    question:'how is your year?',
     answers:{
       0:'i agree',
       1:'i disagree',
