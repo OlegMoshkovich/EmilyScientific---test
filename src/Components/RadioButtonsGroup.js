@@ -35,6 +35,7 @@ class RadioButtonsGroup extends React.Component {
   handleChange = event => {
     this.setState({ answer: event.target.value });
     console.log('component state',this.state)
+    this.props.handleAnswer(this.state)
   };
 
   answerOptions = () =>{
@@ -66,9 +67,7 @@ class RadioButtonsGroup extends React.Component {
             onChange={this.handleChange}
           >
             {this.answerOptions()}
-
           </RadioGroup>
-
         </FormControl>
       </div>
     );

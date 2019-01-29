@@ -3,9 +3,38 @@
   box-sizing: border-box;
   font-family: 'Helvetica', sans-serif;
 }
+ul {
+  position:relative;
+  top:30px;
+  right:60px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+
+li a {
+  float: right;
+  display: block;
+  padding: 8px;
+  background-color: none;
+  text-decoration: none;
+  font-weight: 300;
+  font-size: 15px;
+  color:'black'
+}
 
 label{
-  border: 1px solid #ccc;
+  /* border-radius:5px; */
+  margin-bottom: 20px;
+  font-size: 13px;
+  background:light grey;
+  padding: 10px;
+}
+.label{
+  /* border: 1px solid #ccc; */ */
   border-radius:5px;
   margin-bottom: 20px;
   font-size: 13px;
@@ -14,6 +43,19 @@ label{
 }
 .App {
   text-align: center;
+}
+.contantForm {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.SimpleRedux {
+  text-align: center;
+  margin-top: 100px;
+}
+.formInput{
+  text-align: center;
+  margin-top: 10px;
 }
 
 .Question{

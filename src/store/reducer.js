@@ -1,3 +1,7 @@
+import { createStore, combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form'
+
+
 const initialState = {
   counter:1
 }
@@ -21,13 +25,11 @@ const reducer = (state = initialState, action) =>{
   }
 }
 
-//   if(action.type === "INCREMENT"){
-//     return{
-//       ...state,
-//       counter:state.counter + 1
-//     }
-//   }
-//   return state;
-// }
+const rootReducer = combineReducers({
+  reducer,
+  form: formReducer
+})
 
-export default reducer;
+
+
+export default rootReducer;

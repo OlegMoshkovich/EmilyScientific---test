@@ -21,7 +21,7 @@ let style = {
   },
 };
 
-class App extends Component {
+class CSV extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -333,7 +333,7 @@ class App extends Component {
       <div className="App">
 
       <div className="title-box">
-        <div className ="project_title">Prepared for Genesis by Oleg Moshkovich.</div>
+        <div className ="project_title">MUI Sample</div>
        </div>
        <TestComponent/>
        <div className="container" style={{paddingTop:'40px'}}>
@@ -466,4 +466,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default CSV;

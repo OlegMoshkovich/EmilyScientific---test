@@ -1,108 +1,41 @@
-import React, { Component } from 'react';
+import React from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import Form from './Containers/Form'
+import SimpleRedux from './Containers/SimpleRedux'
+import ContactPage from './Containers/ContactPage'
+import TextFields from './Containers/TextFields'
+import CSV from './CSV'
 import './App.css';
-// import Button from '@material-ui/core/Button'
-import RadioButtonsGroup from './Components/RadioButtonsGroup'
-import {connect} from 'react-redux';
-
-const collection = [
-  {
-    question:'how are you?',
-    answers:{
-      0:'ok',
-      1:'great',
-      2:'good',
-      3:'bad'
-    }
-  },
-{
-  question:'how was your day?',
-  answers:{
-    0:'it was ok',
-    1:'it was great',
-    2:'it was good',
-    3:'it was bad'
-  }
-},
-{
-  question:'how do your year?',
-  answers:{
-    0:'i agree',
-    1:'i disagree',
-    2:'yes',
-    3:'no'
-  }
-},
-]
-
-// let style = {
-//   button:{
-//     margin:'10px',
-//     fontSize:'10px',
-//     width:'150px'
-//   },
-// };
-
-class App extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-    count:0
-    }
-    this.createQuestions = this.createQuestions.bind(this);
-  }
 
 
+const AppRouter = () => (
+  <Router>
+    <div>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">FormOptions</Link>
+          </li>
+          <li>
+            <Link to="/SimpleRedux">ReduxSimple</Link>
+          </li>
+          <li>
+            <Link to="/ContactPage">ReduxForm</Link>
+          </li>
+          <li>
+            <Link to="/TextFields">Text Input</Link>
+          </li>
 
-  createQuestions = () =>{
-    let questions = [];
-    let index = 0;
+        </ul>
+      </nav>
+      <Route path="/" exact component={Form} />
+      <Route path="/SimpleRedux" component={SimpleRedux} />
+      <Route path="/ContactPage" component={ContactPage} />
+      <Route path="/TextFields" component={TextFields} />
+      <Route path="/CSV" component={CSV} />
 
-    for(let record of collection){
-      questions.push(
-        <div key = {index} className = "Question">
-          <RadioButtonsGroup  key = {index}question = {record.question} answers = {record.answers}  />
-        </div>)
-        index++;
-      }
-      return questions
+    </div>
+  </Router>
+);
 
-  }
-
-  render() {
-
-    return (
-      <div className="App">
-      <div className="title-box">
-        <div className ="project_title">Form Test</div>
-       </div>
-
-      {/*
-         <Button style={style.button} variant="contained" color="primary" onClick={this.props.onCounterIncrement}>Add</Button>
-         <Button style={style.button} variant="contained" color="primary" onClick={this.props.onCounterDecrease}>Subtract</Button>
-
-         <div>{this.props.cnt}</div>
-               */}
-      {this.createQuestions()}
-
-      </div>
-    );
-  }
-}
-
-const mapDispatchToProps = dispatch =>{
-  return {
-    onCounterIncrement: () => { dispatch({type:'INCREMENT'})},
-    onCounterDecrease: () => { dispatch({type:'DECREASE'})}
-    }
-  }
-
-
-
-const mapStateToProps = state => {
-  return {
-    cnt:state.counter
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default AppRouter;
