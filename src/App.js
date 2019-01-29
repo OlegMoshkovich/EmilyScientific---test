@@ -17,10 +17,10 @@ const AppRouter = () => (
             <Link to="/">FormOptions</Link>
           </li>
           <li>
-            <Link to="/SimpleRedux">ReduxSimple</Link>
+            <Link to="/Counter">Counter</Link>
           </li>
           <li>
-            <Link to="/ContactPage">ReduxForm</Link>
+            <Link to="/ContactPage">Form</Link>
           </li>
           <li>
             <Link to="/TextFields">Text Input</Link>
@@ -29,7 +29,7 @@ const AppRouter = () => (
         </ul>
       </nav>
       <Route path="/" exact component={Form} />
-      <Route path="/SimpleRedux" component={SimpleRedux} />
+      <Route path="/Counter" component={SimpleRedux} />
       <Route path="/ContactPage" component={ContactPage} />
       <Route path="/TextFields" component={TextFields} />
       <Route path="/CSV" component={CSV} />
