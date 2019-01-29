@@ -4,7 +4,7 @@ import Form from './Containers/Form'
 import SimpleRedux from './Containers/SimpleRedux'
 import ContactPage from './Containers/ContactPage'
 import TextFields from './Containers/TextFields'
-import CSV from './CSV'
+
 import './App.css';
 
 
@@ -32,7 +32,7 @@ const AppRouter = () => (
       <Route path="/Counter" component={SimpleRedux} />
       <Route path="/ContactPage" component={ContactPage} />
       <Route path="/TextFields" component={TextFields} />
-      <Route path="/CSV" component={CSV} />
+
 
     </div>
   </Router>
