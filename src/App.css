@@ -16,6 +16,11 @@ label{
   text-align: center;
 }
 
+.Question{
+  margin-top:20px;
+  margin-bottom:20px
+}
+
 .container {
   text-align: center;
   padding: 15px;
@@ -45,11 +50,14 @@ label{
   font-size: 15px;
 }
 .title-box{
-  position:relative ;
+  position:relative;
   display: inline-block;
   top:30px;
   padding-right:10rem;
   left:60px;
+}
+.App {
+  text-align: center;
 }
 
 .project_title {
