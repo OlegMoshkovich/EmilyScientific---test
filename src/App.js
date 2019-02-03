@@ -17,7 +17,7 @@ const AppRouter = () => (
             <Link to="/">Form</Link>
           </li>
           <li>
-            <Link to="/Counter">Counter</Link>
+            <Link to="/Counter">Counter-123</Link>
           </li>
           <li>
             <Link to="/ContactPage">Form</Link>
