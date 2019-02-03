@@ -14,7 +14,7 @@ const AppRouter = () => (
       <nav>
         <ul>
           <li>
-            <Link to="/">FormOption</Link>
+            <Link to="/">Form</Link>
           </li>
           <li>
             <Link to="/Counter">Counter</Link>
