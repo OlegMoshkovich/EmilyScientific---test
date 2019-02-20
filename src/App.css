@@ -14,25 +14,18 @@ ul {
   text-decoration: none;
 }
 
-
 li a {
   float: right;
   display: block;
-  padding: 8px;
-  background-color: none;
+  padding: 10px;
+  color: black;
   text-decoration: none;
   font-weight: 300;
-  font-size: 15px;
-  color:'black'
+  font-size: 12px;
 }
 
-label{
-  /* border-radius:5px; */
-  margin-bottom: 20px;
-  font-size: 13px;
-  background:light grey;
-  padding: 10px;
-}
+
+
 .label{
   /* border: 1px solid #ccc; */ */
   border-radius:5px;
@@ -57,6 +50,37 @@ label{
   text-align: center;
   margin-top: 10px;
 }
+.navbar{
+
+}
+
+.input{
+  height:;
+  width:30%;
+  border:none;
+  border-bottom: 10px solid black;
+  radius:'0px';
+  background:'none';
+  font-size:40px;
+  text-align:center;
+}
+
+.input:focus{
+   outline-width: 0;
+}
+.button{
+  width:5%;
+  padding:0px 30px 0px 30px;
+  border:none;
+  radius:'0px';
+  color: grey;
+  background:'none';
+  font-size:80px;
+  cursor:pointer;
+}
+.button:focus {
+  outline:0;
+}
 
 .Question{
   margin-top:20px;
@@ -65,8 +89,15 @@ label{
 
 .container {
   text-align: center;
+  margin: 200px auto;
+  padding: 10px 50px 10px 50px;
+}
+
+.header {
+  text-align: center;
   padding: 15px;
-  margin: 30px auto;
+  margin: 00px auto;
+  font-size: 100px;
 }
 
 .csv-input {
@@ -83,14 +114,8 @@ label{
   margin-right:auto;
 }
 
-.project_title {
-  display:inline;
-  padding-left:1rem;
-  padding-right:1rem;
-  text-decoration: none;
-  font-weight: 300;
-  font-size: 15px;
-}
+
+
 .title-box{
   position:relative;
   display: inline-block;
@@ -108,7 +133,7 @@ label{
   padding-right:1rem;
   text-decoration: none;
   font-weight: 300;
-  font-size: 15px;
+  font-size: 20px;
 }
 .title-box{
   position:absolute ;
@@ -116,4 +141,20 @@ label{
   top:30px;
   padding-right:10rem;
   left:30px;
+}
+
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   text-align: center;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;
+}
+
+:-ms-input-placeholder {
+   text-align: center;
 }
