@@ -16,12 +16,7 @@ const AppRouter = () => (
       <nav className = 'navbar'>
         <ul>
 
-          <li>
-            <Link to="/">Collected Data</Link>
-          </li>
-          <li>
-            <Link to="/">Community Resources</Link>
-          </li>
+
           <li>
             <Link to="/">About</Link>
           </li>
