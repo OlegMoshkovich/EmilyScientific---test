@@ -4,6 +4,7 @@ import Form from './Containers/Form'
 import SimpleRedux from './Containers/SimpleRedux'
 import ContactPage from './Containers/ContactPage'
 import TextFields from './Containers/TextFields'
+import About from './Containers/About'
 import CSV from './CSV'
 import Freedom from './freedom_landing'
 
@@ -15,12 +16,9 @@ const AppRouter = () => (
     <div >
       <nav className = 'navbar'>
         <ul>
-
-
           <li>
-            <Link to="/">About</Link>
+            <Link to="/about">About</Link>
           </li>
-
         </ul>
       </nav>
       <Route path="/" exact component={Freedom} />
@@ -29,8 +27,7 @@ const AppRouter = () => (
       <Route path="/TextFields" component={TextFields} />
       <Route path="/CSV" component={CSV} />
       <Route path="/freedom_landing" component={CSV} />
-
-
+      <Route path="/about" component={About} />
     </div>
   </Router>
 );

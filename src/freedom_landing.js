@@ -26,6 +26,7 @@ class Freedom extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      display:'none',
       name:'',
       definition:'',
       buttonColor:'grey',
@@ -36,11 +37,13 @@ class Freedom extends Component {
   handleChange=(e,type)=>{
     if (type === 'definition'){
       this.setState({
+        display:'none',
         definition:e.target.value,
         buttonColor:'red'
       })
     }else if (type === 'name'){
       this.setState({
+        display:'none',
         name:e.target.value,
         statement:''
       })
@@ -51,8 +54,9 @@ class Freedom extends Component {
 
   handleClick = () =>{
 
-    let string = `For ${this.state.name} the freedom is ${this.state.definition}`
+    let string = `For ${this.state.name} freedom is "${this.state.definition}""`
     this.setState({
+      display:'block',
       statement: string,
       name:'',
       definition:'',
@@ -76,9 +80,17 @@ class Freedom extends Component {
           <input className = "input" placeholder = '---' value = {this.state.definition} onChange={(e) => {this.handleChange(e,'definition')}}/>
           <button className = "button" style ={{color:this.state.buttonColor}} onClick={this.handleClick} >+</button>
 
-          <div style ={{marginTop:'60px',fontSize:'100px',fontWeight:600}}>
-          {this.state.statement}</div>
+          <div style ={{
+              display:this.state.display,
+              fontSize:'60px',
+              fontWeight:600,
+              border:'solid 10px red',
+              margin:'60px 60px 0px 60px',
+              padding:"40px 40px 40px 40px"}}>
+            {this.state.statement}
           </div>
+
+        </div>
 
 
         </div>
