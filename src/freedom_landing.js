@@ -10,6 +10,8 @@ import { Chart } from "react-google-charts";
 import MUIDataTable from "mui-datatables";
 import SimpleTable from './Components/SimpleTable';
 import TestComponent from './Components/TestComponent'
+import TextareaAutosize from 'react-autosize-textarea';
+import StickyFooter from 'react-sticky-footer';
 
 
 
@@ -54,7 +56,7 @@ class Freedom extends Component {
 
   handleClick = () =>{
 
-    let string = `For ${this.state.name} freedom is "${this.state.definition}""`
+    let string = `For ${this.state.name} freedom is "${this.state.definition}"`
     this.setState({
       display:'block',
       statement: string,
@@ -72,30 +74,26 @@ class Freedom extends Component {
         <div className="title-box">
           <div className ="project_title">Freedom Dreaming</div>
         </div>
+
         <div className="container">
           <div className ="header">
-          I,
-          <input className = "input" value = {this.state.name} placeholder = 'name' onChange={(e) => {this.handleChange(e,'name')}}/>
-          dream of freedom as
-          <input className = "input" placeholder = '---' value = {this.state.definition} onChange={(e) => {this.handleChange(e,'definition')}}/>
-          <button className = "button" style ={{color:this.state.buttonColor}} onClick={this.handleClick} >+</button>
-
-          <div style ={{
-              display:this.state.display,
-              fontSize:'60px',
-              fontWeight:600,
-              border:'solid 10px red',
-              margin:'60px 60px 0px 60px',
-              padding:"40px 40px 40px 40px"}}>
-            {this.state.statement}
+            I,
+            <textarea className = "input" value = {this.state.name} placeholder = 'name' onChange={(e) => {this.handleChange(e,'name')}}/>
+            dream of freedom as
+            <TextareaAutosize  maxRows={2}  className = "input" placeholder = '---' value = {this.state.definition} onChange={(e) => {this.handleChange(e,'definition')}}/>
+            <button className = "button" style ={{color:this.state.buttonColor}} onClick={this.handleClick} >+</button>
+            <div style ={{
+                display:this.state.display,
+                fontSize:'60px',
+                fontWeight:600,
+                border:'solid 10px red',
+                margin:'60px 120px 0px 120px',
+                padding:"40px 40px 40px 40px"}}>
+              {this.state.statement}
+            </div>
           </div>
-
-        </div>
-
-
         </div>
       </div>
-
     );
   }
 }

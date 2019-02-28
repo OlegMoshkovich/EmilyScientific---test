@@ -1,3 +1,27 @@
+html, body {
+  height: 100%;
+  margin: 0;
+/* Trivial style make the text large */
+  /* font-size: 15px; */
+}
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+main {
+  flex: 1;
+}
+
+footer {
+  /* Trivial style to differentiate the footer */
+  padding: 4px;
+  text-align: center;
+  background-color: lightgrey;
+}
+
+
+
 
 * {
   box-sizing: border-box;
@@ -24,6 +48,14 @@ li a {
   font-size: 1rem;
 }
 
+/* footer{
+position:absolute;
+left:0;
+bottom:0;
+right:0;
+padding-bottom:60px;
+color:red;
+} */
 
 
 .label{
@@ -36,6 +68,7 @@ li a {
 }
 .App {
   text-align: center;
+  height:auto;
 }
 .contantForm {
   text-align: center;
@@ -63,6 +96,23 @@ li a {
   background:'none';
   font-size:40px;
   text-align:center;
+
+}
+textarea {
+  height:70px;
+  resize: none;
+}
+textarea::placeholder {
+  color: grey;
+}
+/* textarea::focus {
+  outline: grey solid 2;
+  outline-width: 0;
+} */
+
+input::placeholder {
+  color: grey;
+  margin-bottom:30px;
 }
 
 .input:focus{
@@ -95,10 +145,18 @@ li a {
 
 .header {
   text-align: center;
-  padding: 15px;
-  margin: 00px auto;
+  padding: 30px;
+  margin: 0px 40px;
   font-size: 100px;
 }
+.headerabout {
+  text-align: center;
+  padding: 15px;
+  margin: 0px 40px;
+  font-size: 100px;
+
+}
+
 
 .csv-input {
   display: none;
@@ -121,16 +179,14 @@ li a {
   padding-right:10rem;
   left:60px;
 }
-.App {
-  text-align: center;
-}
+
 
 .project_title {
   display:inline;
   padding-left:1rem;
   padding-right:1rem;
   text-decoration: none;
-  font-weight: 300;
+  font-weight: 100;
   font-size: 1rem;
 }
 .title-box{

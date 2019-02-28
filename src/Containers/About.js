@@ -65,17 +65,19 @@ class About extends React.Component {
         <div className="title-box">
           <div className ="project_title" style = {{
             color:'black',
-            borderBottom:'solid 4px black',
+            borderBottom:'solid 4px red',
             paddingBottom: '10px'
           }}>
+
             <Link style = {{
               color:'black',
               textDecoration:"none",
-            }} to="/">Freedom Dreaming</Link>
+              }} to="/">Freedom Dreaming</Link>
+
           </div>
         </div>
         <div className="container">
-          <div className ="header">
+          <div className ="headerabout">
           FREEDOM DREAMING aims to uncover the collective definition of FREEDOM.
           </div>
         </div>
