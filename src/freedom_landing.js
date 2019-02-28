@@ -26,12 +26,42 @@ class Freedom extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name:'',
+      definition:'',
+      buttonColor:'grey',
+      statement:''
     }
   }
 
+  handleChange=(e,type)=>{
+    if (type === 'definition'){
+      this.setState({
+        definition:e.target.value,
+        buttonColor:'red'
+      })
+    }else if (type === 'name'){
+      this.setState({
+        name:e.target.value,
+        statement:''
+      })
+    }
+
+    console.log('name',this.state.name)
+  }
+
+  handleClick = () =>{
+
+    let string = `For ${this.state.name} the freedom is ${this.state.definition}`
+    this.setState({
+      statement: string,
+      name:'',
+      definition:'',
+      buttonColor:'grey'
+    })
+    console.log('statement',this.state.definition)
+  }
+
   render() {
-
-
     return (
 
       <div className="App">
@@ -39,10 +69,15 @@ class Freedom extends Component {
           <div className ="project_title">Freedom Dreaming</div>
         </div>
         <div className="container">
-          <div className ="header">I,
-          <input className = "input" placeholder = 'name'/>
-          dream of freedom as <input className = "input" placeholder = '---'/>
-          <button className = "button">+</button>
+          <div className ="header">
+          I,
+          <input className = "input" value = {this.state.name} placeholder = 'name' onChange={(e) => {this.handleChange(e,'name')}}/>
+          dream of freedom as
+          <input className = "input" placeholder = '---' value = {this.state.definition} onChange={(e) => {this.handleChange(e,'definition')}}/>
+          <button className = "button" style ={{color:this.state.buttonColor}} onClick={this.handleClick} >+</button>
+
+          <div style ={{marginTop:'60px',fontSize:'100px',fontWeight:600}}>
+          {this.state.statement}</div>
           </div>
 
 
