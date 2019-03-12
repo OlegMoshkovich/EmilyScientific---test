@@ -1,39 +1,39 @@
 import React from 'react';
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 
-
-const styles = theme => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent:'center',
-    alignContent:'center',
-    flexWrap: 'wrap',
-    textAlign:'center',
-    marginTop:'50px'
-  },
-  textField: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width:300,
-  },
-  dense: {
-    marginTop: 19,
-  },
-  menu: {
-    width: 200,
-  },
-});
-let style = {
-  button:{
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: '30px',
-    fontSize:'10px',
-    width:'150px'
-  },
-};
+//
+// const styles = theme => ({
+//   container: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     justifyContent:'center',
+//     alignContent:'center',
+//     flexWrap: 'wrap',
+//     textAlign:'center',
+//     marginTop:'50px'
+//   },
+//   textField: {
+//     marginLeft: 'auto',
+//     marginRight: 'auto',
+//     width:300,
+//   },
+//   dense: {
+//     marginTop: 19,
+//   },
+//   menu: {
+//     width: 200,
+//   },
+// });
+// let style = {
+//   button:{
+//     marginLeft: 'auto',
+//     marginRight: 'auto',
+//     marginTop: '30px',
+//     fontSize:'10px',
+//     width:'150px'
+//   },
+// };
 
 
 
@@ -58,14 +58,14 @@ class About extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    // const { classes } = this.props;
     return (
       <div className="App">
 
         <div className="title-box">
           <div className ="project_title" style = {{
             color:'black',
-            borderBottom:'solid 4px red',
+            borderBottom:'solid 2px red',
             paddingBottom: '10px'
           }}>
 
